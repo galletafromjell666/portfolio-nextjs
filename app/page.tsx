@@ -1,21 +1,148 @@
-import { BlogPosts } from 'app/components/posts'
+import { BlogPosts } from "app/components/posts";
 
 export default function Page() {
   return (
     <section>
-      <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
-        My Portfolio
+      <h1 className="mb-8 text-4xl font-semibold tracking-tighter">
+        Hello, I'm<br></br>
+        Giovanni Aguirre
       </h1>
-      <p className="mb-4">
-        {`I'm a Vim enthusiast and tab advocate, finding unmatched efficiency in
-        Vim's keystroke commands and tabs' flexibility for personal viewing
-        preferences. This extends to my support for static typing, where its
-        early error detection ensures cleaner code, and my preference for dark
-        mode, which eases long coding sessions by reducing eye strain.`}
+      <p className="mb-4 text-zinc-400">
+        {`Software Engineer specializing in frontend development, currently contributing to a leading telecommunications company by building and maintaining a robust UCaaS platform. Passionate about crafting seamless user experiences, I excel in diving deep into React, optimizing codebases, and enhancing application performance.`}
       </p>
+      <div data-test-id="experience" className="mt-8">
+        <div className="flex flex-row">
+          <div className="w-1/4">
+            <h1 className="text-xl font-semibold">Experience</h1>
+          </div>
+          <div className="flex flex-col flex-1 space-y-4">
+            <div className="flex-flex-row">
+              <p className="text-zinc-400 text-sm">February 2024, Present</p>
+              <h2>Leading Telecommunications Company, Frontend Engineer L2</h2>
+              <ul className="text-zinc-400 text-sm list-disc list-inside ml-4 item-list">
+                <li>
+                  Implement new features, maintain existing functionality UCaaS
+                  platform using React micro front ends with SingleSPA.
+                </li>
+                <li>
+                  Translate product requirements and design mockups into a
+                  performant and robust UI.
+                </li>
+                <li>
+                  Propose and develop proofs of concept for new features and
+                  enhancements.
+                </li>
+                <li>
+                  Document code changes and updates for better project
+                  maintainability.
+                </li>
+              </ul>
+            </div>
+            <div className="flex-flex-row">
+              <p className="text-zinc-400 text-sm">
+                April, 2023, February 2024
+              </p>
+              <h2>2600Hz (Third party contractor), Software Engineer</h2>
+              <ul className="text-zinc-400 text-sm list-disc list-inside ml-4 item-list">
+                <li>
+                  Developed and maintained micro front ends for end-users of a
+                  UCaaS platform, ensuring modular and scalable architecture
+                  using React.
+                </li>
+                <li>
+                  Enhanced and supported a desktop application built with
+                  Electron, implementing new features and improving user
+                  experience.
+                </li>
+                <li>
+                  Propose and develop proofs of concept for new features and
+                  enhancements.
+                </li>
+                <li>
+                  Implemented real-time data updates using WebSockets,
+                  optimizing performance to handle large data loads efficiently.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-test-id="education" className="mt-8">
+        <div className="flex flex-row">
+          <div className="w-1/4">
+            <h1 className="text-xl font-semibold">Education</h1>
+          </div>
+          <div className="flex flex-col flex-1">
+            <div className="flex-flex-row">
+              <p className="text-zinc-400 text-sm">Feb, 2019, Dec 2023</p>
+              <h2>
+                University of El Salvador, Bachelor's Degree in Computer Systems
+                Engineering
+              </h2>
+              <p className="text-zinc-400">Cum laude</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-test-id="skills" className="mt-8">
+        <div className="flex flex-row">
+          <div className="w-1/4">
+            <h1 className="text-xl font-semibold">Skills</h1>
+          </div>
+          <div className="flex flex-row gap-x-12 flex-1">
+            <ul className="text-zinc-400 item-list">
+              <li>React</li>
+              <li>NextJS</li>
+              <li>MongoDB</li>
+              <li>Drizzle ORM</li>
+              <li>NodeJS</li>
+              <li>Websockets</li>
+            </ul>
+            <ul className="text-zinc-400 item-list">
+              <li>Express</li>
+              <li>Electron</li>
+              <li>Zustand</li>
+              <li>Typescript</li>
+              <li>Python</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div data-test-id="volunteering" className="mt-8">
+        <div className="flex flex-row">
+          <div className="w-1/4">
+            <h1 className="text-xl font-semibold">Volunteering</h1>
+          </div>
+          <div className="flex flex-col flex-1">
+            <div className="flex-flex-row">
+              <p className="text-zinc-400 text-sm">Feb, 2021, Dec 2022</p>
+              <h2>Glasswing International, Robotics Instructor</h2>
+              <ul className="text-zinc-400 text-sm list-disc list-inside ml-4 item-list">
+                <li>
+                  Taught high school students the fundamentals of programming
+                  and robotics.
+                </li>
+                <li>
+                  Guided students in developing problem-solving abilities and
+                  essential soft skills, preparing them for real-world
+                  challenges.
+                </li>
+                <li>
+                  Propose and develop proofs of concept for new features and
+                  enhancements.
+                </li>
+                <li>
+                  Collaborated in organizing and facilitating multi-school
+                  robotics tournaments.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="my-8">
         <BlogPosts />
       </div>
     </section>
-  )
+  );
 }
