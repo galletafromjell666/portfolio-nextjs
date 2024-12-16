@@ -72,14 +72,21 @@ export default function Page() {
           <div className="w-1/4">
             <h1 className="text-xl font-semibold">Education</h1>
           </div>
-          <div className="flex flex-col flex-1">
+          <div className="flex flex-col flex-1 space-y-1.5">
             <div className="flex-flex-row">
               <p className="text-zinc-400 text-sm">Feb, 2019, Dec 2023</p>
               <h2>
                 University of El Salvador, Bachelor's Degree in Computer Systems
-                Engineering
+                Engineering.
               </h2>
               <p className="text-zinc-400">Cum laude</p>
+            </div>
+            <div className="flex-flex-row">
+              <h2>Online Courses</h2>
+              <p className="text-zinc-400">
+                Python for Everybody Specialization, Intermediate PostgreSQL,
+                Develop Serverless Applications on Cloud Run
+              </p>
             </div>
           </div>
         </div>
@@ -136,6 +143,22 @@ export default function Page() {
                   robotics tournaments.
                 </li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-test-id="interests" className="mt-8">
+        <div className="flex flex-row">
+          <div className="w-1/4">
+            <h1 className="text-xl font-semibold">Interests</h1>
+          </div>
+          <div className="flex flex-col flex-1">
+            <div className="flex-flex-row text-zinc-400">
+              <p>
+                Professional: micro frontend architecture, webRTC, websockets,
+                API building, data science.
+              </p>
+              <p>Hobbys: electronics, gaming, PC building, gym training.</p>
             </div>
           </div>
         </div>
