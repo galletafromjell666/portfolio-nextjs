@@ -77,7 +77,7 @@ export default function Page() {
               <p className="text-zinc-400 text-sm">Feb, 2019, Dec 2023</p>
               <h2>
                 University of El Salvador, Bachelor's Degree in Computer Systems
-                Engineering.
+                Engineering. 
               </h2>
               <p className="text-zinc-400">Cum laude</p>
             </div>
@@ -85,7 +85,7 @@ export default function Page() {
               <h2>Online Courses</h2>
               <p className="text-zinc-400">
                 Python for Everybody Specialization, Intermediate PostgreSQL,
-                Develop Serverless Applications on Cloud Run
+                Develop Serverless Applications on Cloud Run.
               </p>
             </div>
           </div>
