@@ -4,18 +4,18 @@ import { GitHub, Gitlab, Linkedin, MessageSquare } from "react-feather";
 function page() {
   return (
     <section>
-      <h1 className="mb-8 text-6xl font-semibold tracking-tighter">Contact</h1>
+      <h1 className="mb-8 text-4xl font-semibold tracking-tighter">Contact</h1>
       <div className="mb-8">
         <a
           target="_blank"
           rel="noopener noreferrer"
           href="mailto:giovanni.aguirrez@hotmail.com"
-          className="text-3xl font-semibold tracking-tighter underline"
+          className="text-2xl font-semibold tracking-tighter underline"
         >
           giovanni.aguirrez@hotmail.com
         </a>
       </div>
-      <h1 className="mb-8 text-xl font-semibold tracking-tighter ">Social:</h1>
+      <h1 className="mb-6 text-xl font-semibold tracking-tighter ">Social:</h1>
       <div className="flex flex-col space-y-4">
         <div className="flex flex-row space-x-2">
           <Linkedin />

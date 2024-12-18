@@ -1,0 +1,64 @@
+---
+title: "Reversing an integer mathematically in TypeScript"
+publishedAt: "2024-12-17"
+summary: "Reversing an integer is one of the most common problems for interviews. It can be easily done if we treat the number as a string, but there is a mathematical way of doing it..."
+---
+
+Reversing an integer is one of the most common problems for interviews. It can be easily done if we treat the number as a string, but there is a mathematical way of doing it.
+
+## The Idea
+
+The basic idea involves extracting digits one by one from the number’s end, then building the reversed number by shifting its digits left (multiplying by 10) and adding the extracted digit.
+
+## Steps
+
+1 - Initialize a variable to hold the reversed number, starting at 0.
+
+2 - Use a loop to extract digits from the original number until it becomes 0.
+
+3 - Extract the last digit using the modulus operator (% 10).
+
+4 - Append the digit to the reversed number by multiplying the current reversed number by 10 and adding the extracted digit.
+
+5 - Remove the last digit from the original number using integer division (Math.floor(number / 10)).
+
+```ts
+function numberReverser(num: number): number {
+  let reversed = 0;
+  let isNegative = num < 0;
+
+  // Make the number positive if it's negative
+  num = Math.abs(num);
+
+  while (num > 0) {
+    // Extract the last digit
+    const lastDigit = num % 10;
+
+    // Append it to the reversed number
+    reversed = reversed * 10 + lastDigit;
+
+    // Remove the last digit from the original number
+    num = Math.floor(num / 10);
+  }
+
+  // Restore the sign if the number was negative
+  return isNegative ? -reversed : reversed;
+}
+
+// Example Usage
+console.log(numberReverser(123));  // Output: 321
+console.log(numberReverser(-456)); // Output: -654
+console.log(numberReverser(1000)); // Output: 1
+```
+
+## Edge Cases
+
+Negative Numbers: Properly handled by restoring the sign after reversing.
+
+Numbers with Trailing Zeros: For example, 1000 becomes 1 since leading zeros are dropped in numeric representation.
+
+Single-Digit Numbers: Remain unchanged.
+
+## Conclusion
+
+Static typing offers numerous benefits that contribute to the development of robust, efficient, and maintainable software. By catching errors early, enhancing readability, facilitating tooling, and enabling optimizations, static typing is an invaluable asset for developers. As the software industry continues to mature, the importance of static typing in ensuring code quality and performance cannot be overstated. Whether you're working on a large-scale enterprise application or a small project, embracing static typing can lead to better software development outcomes.
