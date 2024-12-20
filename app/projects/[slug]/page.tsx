@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import { baseUrl } from "app/sitemap";
-import { getBlogPosts } from "app/utils";
 import Post from "app/components/post";
+import { getProjectsPosts } from "app/utils";
 
 export async function generateStaticParams() {
-  let posts = getBlogPosts();
+  let posts = getProjectsPosts();
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -12,7 +12,7 @@ export async function generateStaticParams() {
 }
 
 export function generateMetadata({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug);
+  let post = getProjectsPosts().find((post) => post.slug === params.slug);
   if (!post) {
     return;
   }
@@ -51,8 +51,8 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function Blog({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug);
+export default function Project({ params }) {
+  let post = getProjectsPosts().find((post) => post.slug === params.slug);
 
   if (!post) {
     notFound();

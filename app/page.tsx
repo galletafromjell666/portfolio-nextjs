@@ -1,4 +1,4 @@
-import { BlogPosts } from "app/components/posts";
+import { Posts } from "app/components/posts";
 
 export default function Page() {
   return (
@@ -77,7 +77,7 @@ export default function Page() {
               <p className="text-zinc-400 text-sm">Feb, 2019, Dec 2023</p>
               <h2>
                 University of El Salvador, Bachelor's Degree in Computer Systems
-                Engineering. 
+                Engineering.
               </h2>
               <p className="text-zinc-400">Cum laude</p>
             </div>
@@ -135,10 +135,6 @@ export default function Page() {
                   challenges.
                 </li>
                 <li>
-                  Propose and develop proofs of concept for new features and
-                  enhancements.
-                </li>
-                <li>
                   Collaborated in organizing and facilitating multi-school
                   robotics tournaments.
                 </li>
@@ -164,7 +160,7 @@ export default function Page() {
         </div>
       </div>
       <div className="my-8">
-        <BlogPosts />
+        <Posts source="blog" />
       </div>
     </section>
   );
