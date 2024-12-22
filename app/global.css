@@ -153,3 +153,11 @@ table {
 .item-list > li + li {
   @apply mt-1.5;
 }
+
+.text-muted {
+  @apply text-neutral-600 dark:text-neutral-400;
+}
+
+.text-primary {
+  @apply text-neutral-900 dark:text-neutral-100;
+}

@@ -7,19 +7,19 @@ export default function Page() {
         Hello, I'm<br></br>
         Giovanni Aguirre
       </h1>
-      <p className="mb-4 text-zinc-400">
+      <p className="mb-4 text-muted">
         {`Software Engineer specializing in frontend development, currently contributing to a leading telecommunications company by building and maintaining a robust UCaaS platform. Passionate about crafting seamless user experiences, I excel in diving deep into React, optimizing codebases, and enhancing application performance.`}
       </p>
-      <div data-test-id="experience" className="mt-8">
+      <div data-test-id="experience" className="m t-8">
         <div className="flex flex-row">
           <div className="w-1/4">
             <h1 className="text-xl font-semibold">Experience</h1>
           </div>
           <div className="flex flex-col flex-1 space-y-4">
             <div className="flex-flex-row">
-              <p className="text-zinc-400 text-sm">February 2024, Present</p>
+              <p className="text-muted text-sm">February 2024, Present</p>
               <h2>Leading Telecommunications Company, Frontend Engineer L2</h2>
-              <ul className="text-zinc-400 text-sm list-disc list-inside ml-4 item-list">
+              <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
                 <li>
                   Implement new features, maintain existing functionality UCaaS
                   platform using React micro front ends with SingleSPA.
@@ -39,11 +39,11 @@ export default function Page() {
               </ul>
             </div>
             <div className="flex-flex-row">
-              <p className="text-zinc-400 text-sm">
+              <p className="text-muted text-sm">
                 April, 2023, February 2024
               </p>
               <h2>2600Hz (Third party contractor), Software Engineer</h2>
-              <ul className="text-zinc-400 text-sm list-disc list-inside ml-4 item-list">
+              <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
                 <li>
                   Developed and maintained micro front ends for end-users of a
                   UCaaS platform, ensuring modular and scalable architecture
@@ -74,16 +74,16 @@ export default function Page() {
           </div>
           <div className="flex flex-col flex-1 space-y-1.5">
             <div className="flex-flex-row">
-              <p className="text-zinc-400 text-sm">Feb, 2019, Dec 2023</p>
+              <p className="text-muted text-sm">Feb, 2019, Dec 2023</p>
               <h2>
                 University of El Salvador, Bachelor's Degree in Computer Systems
                 Engineering.
               </h2>
-              <p className="text-zinc-400">Cum laude</p>
+              <p className="text-muted">Cum laude</p>
             </div>
             <div className="flex-flex-row">
               <h2>Online Courses</h2>
-              <p className="text-zinc-400">
+              <p className="text-muted">
                 Python for Everybody Specialization, Intermediate PostgreSQL,
                 Develop Serverless Applications on Cloud Run.
               </p>
@@ -97,7 +97,7 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Skills</h1>
           </div>
           <div className="flex flex-row gap-x-12 flex-1">
-            <ul className="text-zinc-400 item-list">
+            <ul className="text-muted item-list">
               <li>React</li>
               <li>NextJS</li>
               <li>MongoDB</li>
@@ -105,7 +105,7 @@ export default function Page() {
               <li>NodeJS</li>
               <li>Websockets</li>
             </ul>
-            <ul className="text-zinc-400 item-list">
+            <ul className="text-muted item-list">
               <li>Express</li>
               <li>Electron</li>
               <li>Zustand</li>
@@ -122,9 +122,9 @@ export default function Page() {
           </div>
           <div className="flex flex-col flex-1">
             <div className="flex-flex-row">
-              <p className="text-zinc-400 text-sm">Feb, 2021, Dec 2022</p>
+              <p className="text-muted text-sm">Feb, 2021, Dec 2022</p>
               <h2>Glasswing International, Robotics Instructor</h2>
-              <ul className="text-zinc-400 text-sm list-disc list-inside ml-4 item-list">
+              <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
                 <li>
                   Taught high school students the fundamentals of programming
                   and robotics.
@@ -149,7 +149,7 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Interests</h1>
           </div>
           <div className="flex flex-col flex-1">
-            <div className="flex-flex-row text-zinc-400">
+            <div className="flex-flex-row text-muted">
               <p>
                 Professional: micro frontend architecture, webRTC, websockets,
                 API building, data science.
