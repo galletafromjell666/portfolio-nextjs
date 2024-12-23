@@ -12,15 +12,15 @@ The basic idea involves extracting digits one by one from the number’s end, th
 
 ## Steps
 
-1 - Initialize a variable to hold the reversed number, starting at 0.
+1. Initialize a variable to hold the reversed number, starting at 0.
 
-2 - Use a loop to extract digits from the original number until it becomes 0.
+2. Use a loop to extract digits from the original number until it becomes 0.
 
-3 - Extract the last digit using the modulus operator (% 10).
+3. Extract the last digit using the modulus operator (% 10).
 
-4 - Append the digit to the reversed number by multiplying the current reversed number by 10 and adding the extracted digit.
+4. Append the digit to the reversed number by multiplying the current reversed number by 10 and adding the extracted digit.
 
-5 - Remove the last digit from the original number using integer division (Math.floor(number / 10)).
+5. Remove the last digit from the original number using integer division (Math.floor(number / 10)).
 
 ```ts
 function numberReverser(num: number): number {
