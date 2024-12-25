@@ -11,7 +11,7 @@ export default function Page() {
         {`Software Engineer specializing in frontend development, currently contributing to a leading telecommunications company by building and maintaining a robust UCaaS platform. Passionate about crafting seamless user experiences, I excel in diving deep into React, optimizing codebases, and enhancing application performance.`}
       </p>
       <div data-test-id="experience" className="m t-8">
-        <div className="flex flex-row">
+        <div className="flex flex-col md:flex-row">
           <div className="w-1/4">
             <h1 className="text-xl font-semibold">Experience</h1>
           </div>
@@ -39,9 +39,7 @@ export default function Page() {
               </ul>
             </div>
             <div className="flex-flex-row">
-              <p className="text-muted text-sm">
-                April, 2023, February 2024
-              </p>
+              <p className="text-muted text-sm">April, 2023, February 2024</p>
               <h2>2600Hz (Third party contractor), Software Engineer</h2>
               <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
                 <li>
@@ -68,7 +66,7 @@ export default function Page() {
         </div>
       </div>
       <div data-test-id="education" className="mt-8">
-        <div className="flex flex-row">
+        <div className="flex flex-col md:flex-row">
           <div className="w-1/4">
             <h1 className="text-xl font-semibold">Education</h1>
           </div>
@@ -92,7 +90,7 @@ export default function Page() {
         </div>
       </div>
       <div data-test-id="skills" className="mt-8">
-        <div className="flex flex-row">
+        <div className="flex flex-col md:flex-row">
           <div className="w-1/4">
             <h1 className="text-xl font-semibold">Skills</h1>
           </div>
@@ -116,7 +114,7 @@ export default function Page() {
         </div>
       </div>
       <div data-test-id="volunteering" className="mt-8">
-        <div className="flex flex-row">
+        <div className="flex flex-col md:flex-row">
           <div className="w-1/4">
             <h1 className="text-xl font-semibold">Volunteering</h1>
           </div>
@@ -144,7 +142,7 @@ export default function Page() {
         </div>
       </div>
       <div data-test-id="interests" className="mt-8">
-        <div className="flex flex-row">
+        <div className="flex flex-col md:flex-row">
           <div className="w-1/4">
             <h1 className="text-xl font-semibold">Interests</h1>
           </div>
@@ -160,6 +158,9 @@ export default function Page() {
         </div>
       </div>
       <div className="my-8">
+        <h2 className="text-2xl font-semibold dark:border-t-white border-t-1 pt-2 border-t-stone-950 mt-2">
+          Blog entries
+        </h2>
         <Posts source="blog" />
       </div>
     </section>
