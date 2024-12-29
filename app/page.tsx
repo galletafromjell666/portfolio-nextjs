@@ -16,7 +16,7 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Experience</h1>
           </div>
           <div className="flex flex-col flex-1 space-y-4">
-            <div className="flex-flex-row">
+            <div className="flex-flex-row space-y-0.5">
               <p className="text-muted text-sm">February 2024, Present</p>
               <h2>Leading Telecommunications Company, Frontend Engineer L2</h2>
               <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
@@ -38,7 +38,7 @@ export default function Page() {
                 </li>
               </ul>
             </div>
-            <div className="flex-flex-row">
+            <div className="flex-flex-row space-y-0.5">
               <p className="text-muted text-sm">April, 2023, February 2024</p>
               <h2>2600Hz (Third party contractor), Software Engineer</h2>
               <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
@@ -71,7 +71,7 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Education</h1>
           </div>
           <div className="flex flex-col flex-1 space-y-1.5">
-            <div className="flex-flex-row">
+            <div className="flex-flex-row space-y-0.5">
               <p className="text-muted text-sm">Feb, 2019, Dec 2023</p>
               <h2>
                 University of El Salvador, Bachelor's Degree in Computer Systems
@@ -79,7 +79,7 @@ export default function Page() {
               </h2>
               <p className="text-muted">Cum laude</p>
             </div>
-            <div className="flex-flex-row">
+            <div className="flex-flex-row space-y-0.5">
               <h2>Online Courses</h2>
               <p className="text-muted">
                 Python for Everybody Specialization, Intermediate PostgreSQL,
@@ -119,7 +119,7 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Volunteering</h1>
           </div>
           <div className="flex flex-col flex-1">
-            <div className="flex-flex-row">
+            <div className="flex-flex-row space-y-0.5">
               <p className="text-muted text-sm">Feb, 2021, Dec 2022</p>
               <h2>Glasswing International, Robotics Instructor</h2>
               <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
@@ -147,7 +147,7 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Interests</h1>
           </div>
           <div className="flex flex-col flex-1">
-            <div className="flex-flex-row text-muted">
+            <div className="flex-flex-row space-y-0.5 text-muted">
               <p>
                 Professional: micro frontend architecture, webRTC, websockets,
                 API building, data science.
