@@ -12,7 +12,7 @@ export default function Footer() {
             href="/rss"
           >
             <ArrowUpRight />
-            <p className="ml-2 h-7">rss</p>
+            <p className="ml-2 h-7">blog rss</p>
           </a>
         </li>
         <li>
@@ -20,7 +20,7 @@ export default function Footer() {
             className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
             rel="noopener noreferrer"
             target="_blank"
-            href="https://vercel.com/templates/next.js/portfolio-starter-kit"
+            href="https://github.com/galletafromjell666/portfolio-nextjs"
           >
             <ArrowUpRight />
             <p className="ml-2 h-7">view source</p>
