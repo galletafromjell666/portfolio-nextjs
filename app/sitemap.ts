@@ -1,10 +1,15 @@
-import { getBlogPosts } from "./utils";
+import { getBlogPosts, getProjectsPosts } from "./utils";
 
-export const baseUrl = "https://gioaguirre.xyz";
+export const baseUrl = "https://www.gioaguirre.xyz/";
 
 export default async function sitemap() {
   let blogs = getBlogPosts().map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: post.metadata.publishedAt,
+  }));
+
+  let projects = getProjectsPosts().map((post) => ({
+    url: `${baseUrl}/projects/${post.slug}`,
     lastModified: post.metadata.publishedAt,
   }));
 
@@ -13,5 +18,5 @@ export default async function sitemap() {
     lastModified: new Date().toISOString().split("T")[0],
   }));
 
-  return [...routes, ...blogs];
+  return [...routes, ...blogs, ...projects];
 }
