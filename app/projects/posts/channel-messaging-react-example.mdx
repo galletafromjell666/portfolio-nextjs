@@ -7,6 +7,7 @@ stack: "React, TypeScript, channel messaging API"
 
 Two-way communication between a parent window and an iframe is a common requirement in web development. The MessageChannel API provides an elegant way to establish this communication by creating two connected ports (port1 and port2). Here's a small project demonstrating how to set up such communication:
 
+[GitHub Repository](https://github.com/galletafromjell666/channel-messaging-react-example)
 
 ## The Idea
 - Parent Frame: Creates a MessageChannel and stores port1 in a ref, listens for the iframe's load event, and sends port2 to the iframe using postMessage.
