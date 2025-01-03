@@ -10,7 +10,7 @@ Two-way communication between a parent window and an iframe is a common requirem
 [GitHub Repository](https://github.com/galletafromjell666/channel-messaging-react-example)
 
 ## The Idea
-- Parent Frame: Creates a MessageChannel and stores port1 in a ref, listens for the iframe's load event, and sends port2 to the iframe using postMessage.
+- Parent Frame: Creates a MessageChannel and stores port1 in a ref, listens for the iframe's load event, and sends port2 to the iframe using postMessage from the [Channel Messaging API](https://developer.mozilla.org/en-US/docs/Web/API/MessagePort/postMessage).
 - Iframe: Sets up a listener for the message event, stores port2 in a ref, and uses it for two-way communication with the parent.
 
 ## Gallery
