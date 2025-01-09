@@ -8,12 +8,13 @@ export default function Page() {
         Giovanni Aguirre
       </h1>
       <p className="mb-4 text-muted">
-        Software engineer from El Salvador specializing in frontend development.
-        Currently working in a leading telecom company by building and
-        maintaining a UCaaS platform. Passionate about continuous learning and
-        embracing new challenges, I like at crafting exceptional user
-        experiences and delving deep into TypeScript it's environment to create
-        innovative solutions.
+        Hello there, I’m a frontend engineer from El Salvador. Right now, I’m
+        working at a leading telecom company, building and maintaining a UCaaS
+        platform. I love digging into TypeScript and finding creative ways to
+        solve problems and build awesome user experiences. I’m a huge fan of
+        learning new things and taking on challenges—whether it’s exploring new
+        frameworks, improving my skills, or just figuring out how to make stuff
+        work better.
       </p>
       <div data-test-id="experience" className="m t-8">
         <div className="flex flex-col md:flex-row">
@@ -22,45 +23,39 @@ export default function Page() {
           </div>
           <div className="flex flex-col flex-1 space-y-4">
             <div className="flex-flex-row space-y-0.5">
-              <p className="text-muted text-sm">February 2024, Present</p>
-              <h2>Leading Telecommunications Company, Frontend Engineer L2</h2>
+              <p className="text-muted text-sm">March 2024, Present</p>
+              <h2>Ooma Inc, Frontend Engineer L2</h2>
               <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
                 <li>
-                  Implement new features, maintain existing functionality for a
-                  UCaaS platform using React micro front ends with SingleSPA.
+                  Develop new modules for a UcaaS platform as part of a 8-person
+                  team.
                 </li>
                 <li>
                   Translate product requirements and design mockups into a pixel
                   perfect and robust UI.
                 </li>
                 <li>
-                  Propose and develop proofs of concept for new features and
-                  enhancements.
+                  Do code reviews to keep the code clean, share ideas and help
+                  to write better, more readable code.
                 </li>
-                <li>Document code changes and updates for release notes.</li>
               </ul>
             </div>
             <div className="flex-flex-row space-y-0.5">
-              <p className="text-muted text-sm">April, 2023, February 2024</p>
-              <h2>2600Hz (Third party contractor), Software Engineer</h2>
+              <p className="text-muted text-sm">March, 2023, February 2024</p>
+              <h2>2600Hz, Software Engineer</h2>
               <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
                 <li>
-                  Developed and maintained micro front ends applications of a
-                  UCaaS platform, managing events and communication between apps
-                  using React.
+                  Implemented new features, maintained existing functionality for a
+                  UCaaS platform using React micro front ends with SingleSPA.
                 </li>
                 <li>
                   Enhanced and supported a desktop application built with
-                  Electron, implementing new features and improving user
-                  experience.
+                  Electron.
                 </li>
+                <li>Propose and develop proofs of concept for new features.</li>
                 <li>
-                  Propose and develop proofs of concept for new features and
-                  enhancements.
-                </li>
-                <li>
-                  Implemented real-time data updates using WebSockets and
-                  optimizing data structures to improve performance
+                  Consume real-time data events using WebSockets and optimizing
+                  data structures to improve performance.
                 </li>
               </ul>
             </div>
@@ -90,7 +85,7 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Online Courses</h1>
           </div>
           <div className="flex flex-row gap-x-12 flex-1">
-            <ul className="text-primary item-list list-disc list-inside">
+            <ul className="text-muted item-list">
               <li>Coursera, Python for Python for Everybody Specialization</li>
               <li>Coursera, Intermediate PostgreSQL</li>
               <li>
