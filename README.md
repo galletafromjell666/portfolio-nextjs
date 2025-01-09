@@ -27,5 +27,5 @@ vercel login
 deploy
 
 ```shell
-vercel
+vercel --prod
 ```
