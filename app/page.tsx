@@ -4,17 +4,16 @@ export default function Page() {
   return (
     <section>
       <h1 className="mb-8 text-4xl font-semibold tracking-tighter">
-        Hello, I'm<br></br>
+        Hey there, I'm<br></br>
         Giovanni Aguirre
       </h1>
       <p className="mb-4 text-muted">
-        Hello there, I’m a frontend engineer from El Salvador. Right now, I’m
-        working at a leading telecom company, building and maintaining a UCaaS
-        platform. I love digging into TypeScript and finding creative ways to
-        solve problems and build awesome user experiences. I’m a huge fan of
-        learning new things and taking on challenges—whether it’s exploring new
-        frameworks, improving my skills, or just figuring out how to make stuff
-        work better.
+        I’m a frontend engineer from El Salvador. Right now, I’m working at a
+        leading telecom company, building and maintaining a UCaaS platform. I
+        love digging into TypeScript and finding creative ways to solve problems
+        and build awesome user experiences. I’m a huge fan of learning new
+        things and taking on challenges—whether it’s exploring new frameworks,
+        improving my skills, or just figuring out how to make stuff work better.
       </p>
       <div data-test-id="experience" className="m t-8">
         <div className="flex flex-col md:flex-row">
@@ -45,8 +44,9 @@ export default function Page() {
               <h2>2600Hz, Software Engineer</h2>
               <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
                 <li>
-                  Implemented new features, maintained existing functionality for a
-                  UCaaS platform using React micro front ends with SingleSPA.
+                  Implemented new features, maintained existing functionality
+                  for a UCaaS platform using React micro front ends with
+                  SingleSPA.
                 </li>
                 <li>
                   Enhanced and supported a desktop application built with

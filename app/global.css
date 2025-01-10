@@ -161,3 +161,15 @@ table {
 .text-primary {
   @apply text-neutral-900 dark:text-neutral-100;
 }
+
+nav .active::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -0.275rem;
+  width: 0.275rem;
+  height: 0.275rem;
+  border-radius: 50%; 
+  @apply bg-neutral-900 dark:bg-neutral-100
+}
