@@ -1,0 +1,46 @@
+---
+title: "How to disable internal microphone and camera on Linux"
+publishedAt: "2025-01-30"
+summary: "Disabling input devices can be required for privacy, security, or debugging. This guide provides the necessary commands to achieve it."
+---
+
+This situation happened to me last week—I needed to handle users without media devices on their system. Reproducing the issue on my laptop was somewhat difficult, but with the commands at the end of this entry, it becomes an easy task.
+
+This JavaScript code is used to access user media. We pass constraints to request audio and video, then hope for the best! The user might deny permissions, or their machine might not have the required media devices.
+```ts
+window.navigator.mediaDevices.getUserMedia({
+  audio: true,
+  video: true,
+}).then(c => console.log(c)).catch(e => console.error(e));
+```
+
+When everything works as expected and the user grants the required permissions, we get:
+```ts
+// MediaStream {id: '4c211238-5cf2-4996-92af-27ac99728d98', active: true, onaddtrack: null, onremovetrack: null, onactive: null, …}
+```
+But sometimes, the user may not have the required media devices.
+
+```ts
+// NotFoundError: Requested device not found
+```
+
+If we want to replicate this situation and trigger the error, we can use the following commands to disable our input devices:
+```shell
+# Remove video device
+sudo modprobe -r uvcvideo
+
+# Audio
+# First, We need to know the audio modules on our system
+cat /proc/asound/modules
+# -> 0 snd_hda_intel
+# -> 1 snd_soc_skl_hda_dsp
+
+# Second, We stop pipewire, this is important for the third step
+systemctl --user stop pipewire.socket
+
+# Third, Remove audio modules (replace if required)
+sudo modprobe -rf snd_hda_intel
+sudo modprobe -rf snd_soc_skl_hda_dsp
+```
+
+These commands were tested on Kubuntu 24.04.1.

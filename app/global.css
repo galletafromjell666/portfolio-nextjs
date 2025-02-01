@@ -167,7 +167,7 @@ nav .active::before {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: -0.275rem;
+  left: -0.175rem;
   width: 0.275rem;
   height: 0.275rem;
   border-radius: 50%; 
