@@ -1,0 +1,136 @@
+---
+title: "Cleaner JavaScript with Logical Assignment Operators (&&=, ||=, ??=)"
+publishedAt: "2025-02-14"
+summary: "A guide with examples on how logical assignment operators (&&=, ||=, ??=) in JavaScript simplify assignments."
+---
+
+This guide explains how JavaScript’s logical assignment operators can simplify your code by reducing the amount of lines needed for conditional assignments. 
+
+## Logical OR Assignment (`||=`)
+
+The Logical OR assignment operator assigns a value to a variable only if its current value is `falsy`. This provides a quick way to assign a fallback for values that might otherwise be `undefined`, `null`, `zero`, or otherwise considered false. Instead of writing full conditional statements or ternary expressions, you can use `||=` to shorten your code.
+
+For instance, you can see that when a string variable is empty, it gets replaced by a fallback value. The operator works similarly with arrays and object properties.
+
+```ts
+
+let a: string = ''; // Remember that an empty string is a falsy value
+const FALL_BACK = 'FALL_BACK';
+a ||= FALL_BACK;
+console.log(a); // Shows FALL_BACK since an empty string is falsy
+
+// Its equivalent can be:
+a = '';
+a = a || (a = FALL_BACK);
+console.log(a); // Prints: FALL_BACK
+
+// Equivalent using ternary operator:
+a = '';
+a = a ? a : FALL_BACK;
+console.log(a); // Prints: FALL_BACK
+
+// An even longer equivalent with a if statement
+a = '';
+if (!a) {
+  a = FALL_BACK;
+}
+console.log(a); // Prints: FALL_BACK
+```
+
+It can work with arrays:
+
+```ts
+
+const numberArray = [0, 2, 3, 4];
+numberArray[0] ||= 1;
+console.log(numberArray); // Prints: [ 1, 2, 3, 4 ]
+
+```
+
+And also can work with objects and nested properties:
+
+```ts
+
+// Declare and interface for our object
+interface User {
+  name: string;
+  lastName: string;
+  address?: string;
+  options?: {
+    zone?: string;
+  };
+  preferences?: {
+    colorTheme?: 'white' | 'dark';
+  };
+}
+const user: User = {
+  name: 'Gio',
+  lastName: 'Aguirre'
+};
+
+// user.address its optional, let's add a value:
+
+user.address ||= 'Raccoon City';
+
+/**
+ * Let's assign a value for user.options.zone, For this we first need to assign a value to user.options.
+ * This step is required to prevent: 'user.options' is possibly 'undefined'.ts(18048)" and "The left-hand side of an assignment expression may not be an optional property access.ts(2779)"
+ */
+user.options ||= {};
+// Now we can safely assign user.options.zone using the logical OR assignment operator
+user.options.zone ||= 'us-central1-a';
+console.log(user);
+/**
+ * it prints:
+ * {
+ *   name: 'Gio',
+ *   lastName: 'Aguirre',
+ *   address: 'Raccoon City',
+ *   options: { zone: 'us-central1-a' }
+ * }
+ */
+
+(user.preferences ||= {}).colorTheme ||= 'dark'; // Another way to prevent potential errors on nested optional properties
+console.log(user);
+/**
+ * it prints:
+ * {
+ *   name: 'Gio',
+ *   lastName: 'Aguirre',
+ *   address: 'Raccoon City',
+ *   options: { zone: 'us-central1-a' },
+ *   preferences: { colorTheme: 'dark' }
+ * }
+ */
+
+```
+
+
+## Nullish Coalescing Assignment (`??=`)
+This works similarly to the logical OR assignment operator (`||=` ), but it only triggers when the left-hand side is either `null` or `undefined`. This behaviour is useful when you want to preserve valid falsy values (like an empty string or zero) while still providing a fallback for real missing data.
+
+```ts
+let b: string | undefined | null = ''; // Remember that an empty string is a falsy value
+b ??= FALL_BACK;
+console.log(b); // Prints an empty string: ''
+
+// Since the empty string is not a nullish value, its value is preserved
+
+b = null;
+b ??= FALL_BACK;
+console.log(b); // Prints: FALL_BACK
+```
+
+## Logical AND Assignment (`&&=`)
+This operator is essentially the opposite of the logical OR assignment (`||=`). It updates a variable only if its current value is truthy. 
+```ts
+let c: string | undefined | null = ''; // Remember that an empty string is a falsy value
+
+c = 'Hey';
+c &&= 'This is a new message!';
+console.log(c); // Prints: This is a new message!
+
+c = null;
+c &&= 'Hello'; // Since null is falsy, the right operand is not evaluated.
+console.log(c); // Prints: null
+```
