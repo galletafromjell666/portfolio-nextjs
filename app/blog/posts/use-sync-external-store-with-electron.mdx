@@ -8,6 +8,8 @@ This entry shows how to use the `useSyncExternalStore` hook to subscribe to an A
 This hook is perfect for the job, as it provides the right tools for seamless state synchronization. 
 While we could achieve a similar result with `useEffect` and `useState`, `useSyncExternalStore` offers a more efficient approach.
 
+The complete code for this example is on this [repository](https://github.com/galletafromjell666/use-sync-external-store-w-electron)
+
 ## Preparing the main process
 We want to send data from `process.getSystemMemoryInfo()` to the renderer process. To achieve this, we need to periodically fetch the data using setInterval after the mainWindow has been created and the app is ready.
 ```ts
@@ -22,12 +24,12 @@ This will send memory info data to the renderer process every second.
 ## Preparing the preload script
 We need to safely expose an API to receive system memory info.
 
-To do this, we declare an api object in our preload script with a property called `onMemoryUsageUpdate`. This property is a function that takes a callback, which runs whenever we receive a `memory-usage` event from the main process.
+To do this, we declare an api object in our preload script with a property called `onMemorySystemInfoUpdate`. This property is a function that takes a callback, which runs whenever we receive a `memory-usage` event from the main process.
 
 We also return a function to unsubscribe from all listeners. This is super important since there's a limit on listeners, and we don’t want to leave unnecessary ones running.
 ```ts
 export const api = {
-  onMemoryUsageUpdate: (callback) => {
+  onMemorySystemInfoUpdate: (callback) => {
     ipcRenderer.on('memory-usage', (_event, data) => callback(data))
 
     // Return a cleanup function
@@ -43,4 +45,84 @@ To expose this API to the renderer, we use contextBridge.exposeInMainWorld, pass
 
 ```ts
 contextBridge.exposeInMainWorld('api', api)
+```
+
+## Implementing our store with `useSyncExternalStore`
+Now we can finally start working in our renderer code, we start creating a type for the data we receive from the main process
+```ts
+export interface SystemMemoryInfo {
+  total: number
+  free: number
+  swapTotal: number
+  swapFree: number
+}
+```
+
+And then we create a memoryStore object with the following keys:
+- data: Initially is just an empty object, but it will store the data received from the main process.
+- listeners: A JavaScript set that holds callback functions from components (or hooks) subscribed to the store. We call these callbacks whenever the store data updates to notify subscribers of changes.
+- subscribe: A function that takes a callback and adds it to the listeners set. It returns a cleanup function that removes the callback from the set when unsubscribed.
+- update: A function that receives SystemMemoryInfo data, updates the data property, and notifies subscribers about the change.
+- getSnapshot: A function that returns a snapshot of the store’s data. It acts as a simple selector. in our case, it just returns `memoryStore.data`.
+- removeIpcListener: Initially a void function, but after we subscribe to `onMemorySystemInfoUpdate` it stores the function returned by `onMemorySystemInfoUpdate`.
+
+Our object should look like:
+```ts
+const memoryStore = {
+  data: {} as SystemMemoryInfo,
+  listeners: new Set<() => void>(),
+  removeIpcListener: (): void => {},
+
+  getSnapshot(): SystemMemoryInfo {
+    // This acts like a selector
+    return memoryStore.data
+  },
+
+  subscribe(listener: () => void): () => void {
+    console.log('[useSystemMemory] Adding new subscriber')
+    memoryStore.listeners.add(listener)
+
+    return () => {
+      // Clean up
+      memoryStore.listeners.delete(listener)
+    }
+  },
+
+  update(data: SystemMemoryInfo): void {
+    memoryStore.data = data
+    // Notify each listener
+    memoryStore.listeners.forEach((listener) => listener())
+  }
+}
+```
+
+We add the code to subscribe to `onMemorySystemInfoUpdate`. It's important to store the returned function so we can unsubscribe before the script unloads:
+```ts
+memoryStore.removeIpcListener = window.api.onMemorySystemInfoUpdate((value) => {
+  console.log('[useSystemMemory] Received new value from main:', value)
+  memoryStore.update(value)
+})
+```
+
+To unsubscribe, we simply listen for the beforeunload event on window and call `memoryStore.removeIpcListener()`:
+```ts
+window.addEventListener('beforeunload', (): void => {
+  memoryStore.removeIpcListener()
+})
+```
+
+Now we can (finally) start working on our React code. We'll create a hook that returns data from `memoryStore`:
+```ts
+import { useSyncExternalStore } from 'react'
+
+function useSystemMemory(): SystemMemoryInfo {
+  return useSyncExternalStore(memoryStore.subscribe, memoryStore.getSnapshot)
+}
+```
+Our hook simplify returns  `useSyncExternalStore`, passing `memoryStore.subscribe` and `memoryStore.getSnapshot` as arguments.
+It is pretty straightforward. Our hook ensures a single source of truth and will cause a re-render whenever the data updates.
+
+And the code to consume our custom hook is:
+```ts
+const systemMemoryInfo = useSystemMemory()
 ```
