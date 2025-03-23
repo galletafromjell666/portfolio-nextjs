@@ -1,0 +1,46 @@
+---
+title: "Syncing System Info from Electron in React with useSyncExternalStore"
+publishedAt: "2025-03-25"
+summary: "useSyncExternalStore is a not-so-popular React hook, but it's super useful for subscribing to an external source and storing its data—no useEffect or useState needed."
+---
+
+This entry shows how to use the `useSyncExternalStore` hook to subscribe to an API exposed in Electron. 
+This hook is perfect for the job, as it provides the right tools for seamless state synchronization. 
+While we could achieve a similar result with `useEffect` and `useState`, `useSyncExternalStore` offers a more efficient approach.
+
+## Preparing the main process
+We want to send data from `process.getSystemMemoryInfo()` to the renderer process. To achieve this, we need to periodically fetch the data using setInterval after the mainWindow has been created and the app is ready.
+```ts
+setInterval(() => {
+    const memoryUsage = process.getSystemMemoryInfo()
+    console.log(memoryUsage)
+    mainWindow.webContents.send('memory-usage', memoryUsage)
+  }, 1000)
+```
+This will send memory info data to the renderer process every second.
+
+## Preparing the preload script
+We need to safely expose an API to receive system memory info.
+
+To do this, we declare an api object in our preload script with a property called `onMemoryUsageUpdate`. This property is a function that takes a callback, which runs whenever we receive a `memory-usage` event from the main process.
+
+We also return a function to unsubscribe from all listeners. This is super important since there's a limit on listeners, and we don’t want to leave unnecessary ones running.
+```ts
+export const api = {
+  onMemoryUsageUpdate: (callback) => {
+    ipcRenderer.on('memory-usage', (_event, data) => callback(data))
+
+    // Return a cleanup function
+    return (): void => {
+      console.log("[preload] Removing listener from ipcRenderer 'memory-usage'")
+      ipcRenderer.removeAllListeners('memory-usage')
+    }
+  }
+}
+
+```
+To expose this API to the renderer, we use contextBridge.exposeInMainWorld, passing the key 'api' and the api object we just created.
+
+```ts
+contextBridge.exposeInMainWorld('api', api)
+```
