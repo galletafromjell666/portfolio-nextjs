@@ -7,6 +7,12 @@ module.exports = {
         pathname: '/galletafromjell666/**',
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "github.com",
+        pathname: '/user-attachments/assets/**',
+        port: "",
+      },
     ],
   },
 };

@@ -1,0 +1,105 @@
+---
+title: "PeerChat"
+publishedAt: "2024-12-05"
+summary: "A browser-based (with minimal server interaction) peer-to-peer chat and video app that enables private communication without logins or external data storage."
+stack: "React, Node.js, Express, Socket.IO, Zustand, Ant Design"
+---
+
+This project is a small browser-based peer-to-peer chat and video app that I built in my spare time to learn new things. I think the result is pretty cool and wanted to publish it. It prioritizes privacy and simplicity—allowing you to create or join rooms instantly with no login or personal data required. Once connected, you can exchange messages, share files, or jump on a video call, all occurs using a direct WebRTC connection.
+
+
+[PeerChat Signaling Server GitHub Repository](https://github.com/galletafromjell666/peer-chat-signaling-server)
+
+[PeerChat Client GitHub Repository](https://github.com/galletafromjell666/peer-chat-client)
+
+
+## Features
+
+- **Browser-based & peer-to-peer:** All communication happens directly between peers using WebRTC.
+
+- **No login or account needed:** Join or create rooms instantly without sharing personal info.
+
+- **Private messaging:** Send text messages directly to your peer with no server storage.
+
+- **File sharing:** Share files securely through peer-to-peer channels.
+
+- **Video & audio calls:** Jump on a direct video or audio call with a single click.
+
+- **Device control:** Easily select and switch audio/video devices from the settings menu.
+
+- **Minimal server use:** Uses a lightweight WebSocket signaling server only during connection setup.
+
+## Stack
+
+- TypeScript
+- React
+- Node.js
+- Express
+- Socket.IO
+- Zustand
+- Ant Design
+- SWR
+- Vite
+
+## Technical Features
+Here is a small list of features that caught my attention and were interesting to develop:
+
+- **Perfect Negotiation Pattern:** This pattern simplifies adding and removing tracks, as well as establishing connections between peers. It helps manage the connection lifecycle smoothly. MDN DOCS
+
+- **File Transfer:** Sending files over WebRTC is not straightforward. On the sender’s side, files are sliced into smaller chunks to be sent through the WebRTC data channel. On the receiver’s side, the chunks are reassembled to reconstruct the file. It’s easier said than done haha.
+
+- **Handling Peer Disconnection:** When a peer disconnects, the remaining peer needs to create a new offer, generate ICE candidates, and re-establish the connection.
+
+- **Media Streams:** Adding a MediaStream to an already established RTCPeerConnection is straightforward, but dealing with media device constraints and updating the stream when a device changes is more complex. Often, renegotiation is required—but thankfully, the perfect negotiation pattern helps a lot! :)
+
+- **Integrating WebSockets with RTCPeerConnection:** Creating a context and custom hooks to integrate WebSockets with RTCPeerConnection made the codebase much more readable and maintainable.
+
+- **SSL Certificates:** Since getUserMedia is only available in secure contexts, I had to generate self-signed certificates to enable it for my local development environment.
+
+
+
+## Media
+
+### Video Demo
+
+<Video alt="video demo" src="https://github.com/user-attachments/assets/fa995bc2-d47e-47b0-b86d-cde130f2a3e0"/>
+
+### Create and join a conference room
+
+<Image
+  alt="Create and join a conference room"
+  src="https://github.com/user-attachments/assets/6b207248-4752-49d8-a9cb-5521268101fe"
+/>
+
+
+### Conversation
+
+<Image
+  alt="Conversation"
+  src="https://github.com/user-attachments/assets/f27472fb-47d8-4c58-b4fa-913af1f7e7b6"
+/>
+
+
+
+### Information Modal
+
+<Image
+  alt="Information Modal"
+  src="https://github.com/user-attachments/assets/2642db35-fd97-4c43-8f3f-3fdb437a59b8"
+/>
+
+
+### Video chat
+
+<Image
+  alt="Video chat"
+  src="https://github.com/user-attachments/assets/02800e17-6f6b-4b12-a113-b0bad5ca2fef"
+/>
+
+
+### User Media Settings
+
+<Image
+  alt="User Media Settings"
+  src="https://github.com/user-attachments/assets/2e18b845-4e30-4760-86f0-59101acb6cc3"
+/>
