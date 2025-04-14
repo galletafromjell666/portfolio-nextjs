@@ -16,7 +16,7 @@ const escapeRegex = new RegExp(
   "g"
 );
 
-export function escapeXml(str: string): string {
+function escapeXml(str: string): string {
   return str.replace(escapeRegex, (char) => xmlEscapeMap[char]);
 }
 export async function GET() {
