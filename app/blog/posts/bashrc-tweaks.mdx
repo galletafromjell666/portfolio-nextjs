@@ -1,0 +1,123 @@
+---
+title: "Useful .bashrc Tweaks That Make Your Terminal Life Easier"
+publishedAt: "2026-05-01"
+summary: "A collection of practical .bashrc tweaks for navigation, safety, auto-correction, and shared terminal history that remove friction from daily terminal use."
+---
+
+If you spend most of your day in the terminal, small improvements to your `.bashrc` add up fast. Here's a collection of tweaks I recently added to mine — nothing fancy, just practical stuff that removes friction.
+
+## Navigation aliases
+
+Typing `cd ..` dozens of times a day gets old. These aliases shave off a few keystrokes every time:
+
+```bash
+alias ..='cd ..'
+alias ...='cd ../..'
+```
+
+Now you just type `..` to go up one level, or `...` to go up two. Simple, but once you get used to it you can't go back.
+
+## Safety aliases
+
+Ever accidentally deleted a file with `rm` and immediately regretted it? These aliases add a confirmation prompt before destructive operations:
+
+```bash
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+```
+
+The `-i` flag makes each command ask "are you sure?" before overwriting or deleting. If you're doing a bulk operation and don't want the prompts, you can bypass it with `\rm` (backslash skips the alias) or `rm -f`.
+
+## Shell behavior improvements
+
+These are `shopt` and `bind` settings that change how bash behaves. No aliases — just smarter defaults.
+
+### Case-insensitive tab completion
+
+```bash
+bind 'set completion-ignore-case on'
+```
+
+You have a folder called `Documents` but you type `cd doc<Tab>` — without this setting, nothing happens. With it, bash completes to `Documents` regardless of case. This alone saves a surprising amount of frustration.
+
+### Auto-correct typos in cd
+
+```bash
+shopt -s cdspell
+```
+
+Typo `cd /usr/loca/bin`? Bash corrects it to `/usr/local/bin`. It handles transposed characters, missing characters, and one extra character. It won't fix everything, but it catches the most common fat-finger mistakes.
+
+### cd without typing cd
+
+```bash
+shopt -s autocd
+```
+
+Instead of `cd projects`, just type `projects` and hit Enter. Bash recognizes it's a directory and changes into it. It feels weird for the first hour, then you wonder how you ever lived without it.
+
+### Remove duplicate history entries
+
+```bash
+HISTCONTROL=ignoreboth:erasedups
+```
+
+The `erasedups` part removes all previous occurrences of a command when you run it again. So if you've typed `git status` 200 times, your history only keeps the most recent one. Makes `Ctrl+R` reverse search actually useful instead of scrolling through the same command over and over.
+
+## History improvements
+
+The default bash history settings are surprisingly small:
+
+```bash
+HISTSIZE=10000
+HISTFILESIZE=20000
+```
+
+The defaults are 1,000 and 2,000. Bumping them up means you can search back weeks or months of commands. Disk space is cheap — there's no reason to keep this low.
+
+## Fixing multi-terminal history loss
+
+This one deserves its own section because it's a problem almost everyone hits and few people know the fix.
+
+### The problem
+
+Open two terminals. Run `echo hello` in terminal 1. Run `echo world` in terminal 2. Close terminal 2, then close terminal 1. Now open a new terminal and press Up — you'll see `echo hello` but `echo world` is gone.
+
+Why? By default, bash only writes its history to `~/.bash_history` when the terminal **exits**. Each terminal keeps its own in-memory history during the session. When multiple terminals close, the last one to close overwrites the history file with its own version. Every other terminal's commands are lost.
+
+Even with `shopt -s histappend` (which appends instead of overwriting), you still have a problem: terminals only write on exit. If a terminal crashes or you close your laptop, those commands are gone.
+
+### The fix
+
+```bash
+PROMPT_COMMAND='history -a; history -c; history -r'
+```
+
+This runs three commands **after every single command you type**:
+
+1. **`history -a`** (append) — Immediately writes the command you just ran to `~/.bash_history`. No waiting for the terminal to close. If the terminal crashes, your commands are already saved.
+
+2. **`history -c`** (clear) — Clears the in-memory history list of the current terminal. This sounds destructive but it's necessary for step 3 to work correctly — without it, you'd get duplicates.
+
+3. **`history -r`** (read) — Reloads the entire `~/.bash_history` file into memory. This pulls in every command from every other terminal.
+
+### The result
+
+All your terminals now share history in real-time. Type a command in terminal 1, switch to terminal 2, press Up — it's there. No more lost commands. No more "which terminal did I run that in?"
+
+### How it works together
+
+These settings work as a system:
+
+- **`shopt -s histappend`** — Append to file instead of overwriting
+- **`HISTCONTROL=ignoreboth:erasedups`** — No duplicates, no commands starting with space
+- **`HISTSIZE=10000`** — Keep 10k commands in memory
+- **`HISTFILESIZE=20000`** — Keep 20k commands on disk
+- **`PROMPT_COMMAND='history -a; history -c; history -r'`** — Sync all terminals in real-time
+
+Remove any one of these and the experience degrades. Together, they give you a reliable, shared, clean command history across all your terminal sessions.
+
+### One caveat
+
+Since every terminal reloads the full history after every command, pressing Up will show the most recent command across **all** terminals, not just the current one. If that bothers you, you can use `history -a` alone (without `-c` and `-r`) — you'll still get crash-safe history, but terminals won't see each other's commands until you open a new one.

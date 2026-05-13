@@ -1,0 +1,131 @@
+---
+title: "Rescuing a 100% Full /var Partition on Linux"
+publishedAt: "2026-04-30"
+summary: "How to diagnose a full /var partition, clean up snap packages and apt caches, and use bind mounts to permanently move heavy directories to /home."
+---
+
+I ran into every Linux user's nightmare: my `/var` partition was completely full. Zero bytes available. 100% used. Things were starting to break. Here's how I diagnosed the problem and fixed it for good.
+
+## The Problem
+
+A quick `df -h /var` told the whole story:
+
+```shell
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p8  5.7G  5.6G     0 100% /var
+```
+
+My `/var` partition was a modest 5.7G, and it was packed to the brim.
+
+## Step 1: Find the Culprits
+
+Running `du` on `/var` revealed where all the space was going:
+
+| Directory | Size |
+|---|---|
+| `/var/lib/snapd/snaps` | 3.8G |
+| `/var/lib/apt/lists` | 668M |
+| `/var/cache/apt` | 225M |
+| `/var/log` | 252M |
+| `/var/crash` | 40M |
+
+The biggest offender? **Snap packages** — specifically, old disabled revisions that snap keeps around. Almost 4G of my 5.7G partition was just snap data.
+
+## Step 2: Quick Cleanup
+
+First, the low-hanging fruit:
+
+```shell
+# Remove disabled snap revisions (6 old versions sitting around)
+sudo snap remove --purge core20 --revision 2717
+sudo snap remove --purge core22 --revision 2339
+sudo snap remove --purge firefox --revision 8030
+sudo snap remove --purge gnome-42-2204 --revision 226
+sudo snap remove --purge snapd --revision 26382
+
+# Clean apt cache and package lists
+sudo apt clean
+sudo rm -rf /var/lib/apt/lists/*
+
+# Delete old Chrome crash report
+sudo rm /var/crash/_opt_google_chrome_chrome.1000.crash
+
+# Remove old rotated logs
+sudo rm /var/log/syslog.*.gz /var/log/kern.log.*.gz
+sudo rm -rf /var/log/pulsesecure/logging/* /var/log/cloudflare-warp/*
+```
+
+This helped, but `/var` was still at 75%. The active snap packages alone were eating 2.9G. On a 5.7G partition, that's just not sustainable.
+
+## Step 3: The Real Fix — Bind Mounts
+
+My `/home` partition had **104G free**. The idea: move the heavy directories off `/var` and onto `/home`, then use bind mounts to make everything transparent to the system.
+
+### Moving /var/lib/snapd (2.9G)
+
+```shell
+# Stop snap services
+sudo systemctl stop snapd.service snapd.socket snapd.seeded.service
+
+# Copy data preserving permissions
+sudo cp -a /var/lib/snapd /home/var-snapd
+
+# Replace original with mount point
+sudo rm -rf /var/lib/snapd && sudo mkdir /var/lib/snapd
+
+# Bind mount
+sudo mount --bind /home/var-snapd /var/lib/snapd
+
+# Make it permanent
+echo '/home/var-snapd /var/lib/snapd none bind 0 0' | sudo tee -a /etc/fstab
+
+# Restart snap
+sudo systemctl start snapd.socket snapd.service
+```
+
+### Moving /var/log (159M and growing)
+
+Same approach for logs, which grow indefinitely:
+
+```shell
+sudo cp -a /var/log /home/var-log
+sudo rm -rf /var/log && sudo mkdir /var/log
+sudo mount --bind /home/var-log /var/log
+echo '/home/var-log /var/log none bind 0 0' | sudo tee -a /etc/fstab
+sudo systemctl restart rsyslog
+```
+
+## The Result
+
+```shell
+Before:  /var  5.7G  5.6G     0  100%
+After:   /var  5.7G  4.0G  1.5G   73%
+```
+
+From completely full to 1.5G free, and more importantly, the two directories that grow over time (snap data and logs) now live on `/home` where there's over 100G of headroom.
+
+## Key Takeaways
+
+- **Snap hoards old revisions.** Run `snap list --all | grep disabled` periodically and purge what you don't need.
+- **A small /var partition is a ticking time bomb.** If you can't resize partitions, bind mounts are a clean workaround.
+- **Always leave a README.** I dropped a `README.txt` in each moved directory (`/home/var-snapd/`, `/home/var-log/`) with undo instructions. Future me will thank present me.
+- **`apt clean` and clearing `/var/lib/apt/lists/*` are free wins.** The lists regenerate with `sudo apt update`.
+
+## How to Undo
+
+If I ever repartition properly, reversing this is straightforward:
+
+```shell
+sudo umount /var/lib/snapd
+sudo rm -rf /var/lib/snapd
+sudo mv /home/var-snapd /var/lib/snapd
+
+sudo umount /var/log
+sudo rm -rf /var/log
+sudo mv /home/var-log /var/log
+
+# Remove the two bind-mount lines from /etc/fstab
+sudo systemctl restart rsyslog snapd
+```
+
+Not the most elegant solution, but it works, it's transparent to every application, and it survives reboots. Sometimes pragmatic beats perfect.
