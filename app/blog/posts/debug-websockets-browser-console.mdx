@@ -1,0 +1,121 @@
+---
+title: "Debugging WebSocket Connections from the Browser Console"
+publishedAt: "2026-09-23"
+summary: "Postman can't reproduce CORS or mixed-content errors, so it lies to you about WebSocket bugs. Here's a small console script that tests the connection in the one environment that matters: the browser."
+---
+
+Last week I was chasing a WebSocket issue in our SIP integration. Postman connected just fine, but the app refused to. That gap is the whole reason testing WebSockets outside the browser is a trap: Postman doesn't send a real `Origin`, it doesn't enforce mixed content, and it happily ignores self-signed certificates. It can connect to things your app will never be allowed to connect to, which sends you hunting in the wrong direction.
+
+The browser is the only environment that tells the truth. And you don't need a plugin to test there — just the DevTools console.
+
+## The script
+
+Paste this into your browser console (or save it as a Snippet in the Sources panel so you don't have to paste it again). Change `wsUrl` to the endpoint you're testing:
+
+```js
+let wsUrl = 'wss://sip_server.net:8088/';
+let protocols = ['sip'];
+
+let ws = null;
+
+const log = (...args) =>
+  console.log(`[WS ${new Date().toISOString().split('T')[1].replace('Z', '')}]`, ...args);
+
+function connectWebSocket() {
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+    log('Already connected or connecting, readyState:', ws.readyState);
+    return;
+  }
+
+  ws = new WebSocket(wsUrl, protocols);
+
+  ws.onopen = function () {
+    log('Connection established. Negotiated protocol:', ws.protocol || '(none)');
+  };
+
+  ws.onmessage = function (event) {
+    let data = event.data;
+    try {
+      data = JSON.parse(data);
+    } catch (_) {
+      // not JSON, log the raw frame
+    }
+    log('Message received:', data);
+  };
+
+  ws.onclose = function (event) {
+    if (event.wasClean) {
+      log(`Closed cleanly, code=${event.code} reason=${event.reason || 'none'}`);
+    } else {
+      // code 1006 usually means the server died or the network dropped
+      log(`Connection died, code=${event.code}`, event);
+    }
+    ws = null;
+  };
+
+  ws.onerror = function (error) {
+    console.error('[WS] Error:', error);
+  };
+}
+
+function sendMessage(message) {
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+    log('Not connected, cannot send. readyState:', ws ? ws.readyState : 'no socket');
+    return;
+  }
+  const payload = typeof message === 'string' ? message : JSON.stringify(message);
+  ws.send(payload);
+  log('Message sent:', payload);
+}
+
+function closeWebSocket() {
+  if (!ws) {
+    log('No active connection to close');
+    return;
+  }
+  log('Closing connection...');
+  ws.close();
+}
+```
+
+The functions land on `window`, so you can call them straight from the console.
+
+## How to use it
+
+First set the two constants at the top of the script — the endpoint and the subprotocols you want to negotiate:
+
+```js
+wsUrl = 'wss://your-server.example.com:8088/'; // the endpoint under test
+protocols = ['sip'];                           // or [] when the server expects no subprotocol
+```
+
+I used `let` instead of `const` for these on purpose: you can reassign them and reconnect without re-pasting the whole snippet (re-declaring a `const` in the console throws `Identifier has already been declared`).
+
+Then drive the connection:
+
+```js
+connectWebSocket();                     // open the connection
+sendMessage('OPTIONS sip:... SIP/2.0'); // send a raw frame
+sendMessage({ type: 'ping' });          // objects are JSON-stringified for you
+closeWebSocket();                       // close it
+```
+
+Then open the **Network** tab and filter by **WS**. You'll see the connection with the real handshake — status `101 Switching Protocols`, the request `Origin`, the `Sec-WebSocket-Protocol` header, and the frames in the **Messages** tab. That handshake is where the truth lives.
+
+## Why this beats Postman
+
+WebSockets aren't subject to the same-origin policy the way `fetch` is — there's no CORS preflight. But three things still decide whether the browser will talk to your server, and only the browser enforces them:
+
+- **Origin.** The browser sends an `Origin` header on the handshake and the server is free to reject it. If your server only allows your app's origin, Postman (no `Origin`) connects while the browser gets a failure that looks like CORS.
+- **Mixed content.** An `https://` page can't open a plain `ws://` connection. If your app is served over HTTPS, the URL must be `wss://`. Postman doesn't care.
+- **TLS.** A self-signed or expired certificate blocks `wss://` in the browser. Postman will often let it slide.
+
+So when something connects in Postman but not in your app, the bug is almost never the socket itself — it's one of the three above. Testing in the console puts you in the same security context as the real app.
+
+## A few gotchas
+
+- **The protocol list matters.** Passing `['sip']` asks the server to negotiate the `sip` subprotocol, and the server echoes it back in `Sec-WebSocket-Protocol`. Drop the second argument when the endpoint doesn't expect one, or the handshake can fail outright.
+- **Run it on the right origin.** The `Origin` header is whatever page you're on. If you need to match production, run the script on a page served from the same origin as the app under test.
+- **A failed handshake won't give you a clean message.** A rejected connection usually shows up as a generic `onerror` and a close with code `1006`. That's why the Network tab matters — the actual HTTP status of the handshake is there.
+
+That's it. Small script, no plugins, and it fails exactly the way your users would hit it.
