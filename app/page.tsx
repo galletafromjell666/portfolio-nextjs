@@ -103,18 +103,18 @@ export default function Page() {
           </div>
           <div className="flex flex-row gap-x-12 flex-1">
             <ul className="text-muted item-list">
-              <li>React (2.5 years)</li>
-              <li>Next.js (1 year)</li>
-              <li>MongoDB (1 year)</li>
-              <li>Drizzle ORM(1 year)</li>
-              <li>Node.js(2 years)</li>
+              <li>React</li>
+              <li>Next.js</li>
+              <li>MongoDB</li>
+              <li>Drizzle ORM</li>
+              <li>Node.js</li>
             </ul>
             <ul className="text-muted item-list">
-              <li>Express (2 years)</li>
-              <li>Electron (2 year)</li>
-              <li>Zustand (2 year)</li>
-              <li>Typescript (2.5 years)</li>
-              <li>Python (1.5 year)</li>
+              <li>Express</li>
+              <li>Electron</li>
+              <li>Zustand</li>
+              <li>Typescript</li>
+              <li>Python</li>
             </ul>
           </div>
         </div>
