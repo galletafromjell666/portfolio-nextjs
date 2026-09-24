@@ -67,18 +67,30 @@ export default function Page() {
               <h2>2600Hz, Software Engineer</h2>
               <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
                 <li>
-                  Implemented new features, maintained existing functionality
-                  for a UCaaS platform using React micro front ends with
-                  SingleSPA.
+                  Implemented new features and maintained existing functionality
+                  for a UCaaS platform built with React microfrontends
+                  orchestrated through SingleSPA, keeping each app independently
+                  deployable.
                 </li>
                 <li>
                   Enhanced and supported a desktop application built with
-                  Electron.
+                  Electron, wiring main and renderer process communication and
+                  keeping it in sync with the web platform.
                 </li>
-                <li>Propose and develop proofs of concept for new features.</li>
                 <li>
-                  Consume real-time data events using WebSockets and optimizing
-                  data structures to improve performance.
+                  Proposed and built proofs of concept for new features, then
+                  worked with the team to turn the best ideas into production
+                  work.
+                </li>
+                <li>
+                  Consumed real-time data events over WebSockets, optimizing
+                  data structures and the update flow so the UI stayed
+                  responsive under heavy event traffic.
+                </li>
+                <li>
+                  Worked closely with product and design to translate
+                  requirements into shipped features, and reviewed code to keep
+                  it clean, consistent, and readable.
                 </li>
               </ul>
             </div>
