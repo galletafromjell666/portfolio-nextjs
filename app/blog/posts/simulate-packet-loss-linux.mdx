@@ -1,0 +1,96 @@
+---
+title: "Simulating Packet Loss on Linux to Test Audio and Video"
+publishedAt: "2026-09-23"
+summary: "You can't wait around for real Wi-Fi to misbehave. Use tc and netem to drop incoming and outgoing packets on demand and see how your audio and video stack holds up."
+---
+
+When you're working on anything real-time — a call, a SIP client, a WebRTC stream — the happy path on your desk tells you almost nothing. The bugs show up when the network gets bad, and "bad network" is exactly what you can't reproduce on demand. My Wi-Fi is either fine or completely dead, never 30% loss for ten seconds.
+
+So I simulate it. Linux's traffic control (`tc`) with the `netem` (network emulator) module can drop packets, add latency, and jitter them, which is more than enough to reproduce the degraded audio and video conditions you actually care about.
+
+## Dropping outgoing packets
+
+Outgoing traffic is the easy case, because `tc` shapes egress by default. This drops 25% of the packets leaving your interface:
+
+```bash
+sudo tc qdisc add dev wlp0s20f3 root netem loss 25%
+```
+
+Swap `wlp0s20f3` for your own interface — find it with `ip link` or `ip -br addr`.
+
+To remove it:
+
+```bash
+sudo tc qdisc del dev wlp0s20f3 root netem
+```
+
+## Dropping incoming packets
+
+Incoming traffic is the annoying one. On a normal interface, `tc` can only shape packets going **out**, so you can't just put `netem` on the ingress path. The trick is to redirect ingress traffic into a virtual device and then apply `netem` there. That device is an `ifb` (Intermediate Functional Block).
+
+Set it up once:
+
+```bash
+sudo modprobe ifb
+sudo ip link add ifb0 type ifb
+sudo ip link set ifb0 up
+
+# Replace with your interface
+sudo tc qdisc add dev wlp0s20f3 handle ffff: ingress
+sudo tc filter add dev wlp0s20f3 parent ffff: \
+  protocol ip u32 match u32 0 0 \
+  action mirred egress redirect dev ifb0
+
+sudo tc qdisc add dev ifb0 root netem loss 35%
+```
+
+Read it top to bottom: load the `ifb` module, create `ifb0`, then attach an ingress qdisc to your real interface and redirect everything that arrives into `ifb0`. Once the traffic is flowing through `ifb0`, you can treat it like any other interface and drop 35% of it on the way in.
+
+That asymmetry is why people give up and only test egress: in a call, incoming packet loss is usually the half that hurts.
+
+To tear it all down:
+
+```bash
+sudo tc qdisc del dev ifb0 root
+sudo tc qdisc del dev wlp0s20f3 ingress
+sudo ip link set ifb0 down
+sudo ip link delete ifb0
+```
+
+## Making it hurt more (or differently)
+
+Pure loss is just the start. `netem` also does delay, jitter, duplication, corruption, and reordering, and you can combine them:
+
+```bash
+# 150ms latency with 20ms of jitter
+sudo tc qdisc add dev wlp0s20f3 root netem delay 150ms 20ms
+
+# loss + delay together: a more realistic bad call
+sudo tc qdisc add dev wlp0s20f3 root netem loss 10% delay 100ms
+```
+
+And if you want loss that arrives in bursts instead of uniformly at random — which is closer to what a flaky Wi-Fi link actually does — use the four-state Markov model:
+
+```bash
+sudo tc qdisc add dev wlp0s20f3 root netem loss state 15% 75% 15% 25%
+```
+
+Uniform `loss 25%` gives you steady, even degradation. `loss state` gives you bursts, which is where jitter buffers and concealment logic fall over.
+
+## Checking that it's actually applied
+
+```bash
+tc -s qdisc show dev wlp0s20f3
+tc -s qdisc show dev ifb0
+```
+
+The `-s` flag prints per-queue stats, so the drop counter should climb while you're generating traffic. A quick `ping` is usually enough to watch the loss percentage land where you set it.
+
+## Notes
+
+- Everything here needs root and the `iproute2` package.
+- The `ifb` module has to be loaded before you can create the device, hence the `modprobe`.
+- These rules live in memory and vanish on reboot — nothing to clean up if you forget.
+- If you can't find your interface name, `ip -br addr` labels the one that's `UP` and has your IP.
+
+Being able to dial the loss up and down on command turns "the call breaks up sometimes for some users" into something you can watch happen in real time, fix, and verify. Worth the two minutes of setup.
