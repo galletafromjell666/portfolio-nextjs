@@ -1,12 +1,18 @@
 import fs from "fs";
 import path from "path";
 
-type Metadata = {
+export type Metadata = {
   title: string;
   publishedAt: string;
   summary: string;
   image?: string;
   stack?: string;
+};
+
+export type Post = {
+  metadata: Metadata;
+  slug: string;
+  content: string;
 };
 
 function parseFrontmatter(fileContent: string) {
@@ -31,7 +37,7 @@ function getMDXFiles(dir: string) {
   return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
 }
 
-function readMDXFile(filePath) {
+function readMDXFile(filePath: string) {
   let rawContent = fs.readFileSync(filePath, "utf-8");
   return parseFrontmatter(rawContent);
 }

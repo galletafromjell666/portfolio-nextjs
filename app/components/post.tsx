@@ -1,9 +1,9 @@
-import { formatDate } from "app/utils";
+import { formatDate, type Post as PostType } from "app/utils";
 import React from "react";
 import { CustomMDX } from "./mdx";
 import { baseUrl } from "app/sitemap";
 
-function Post({ post }) {
+function Post({ post }: { post: PostType }) {
   return (
     <section>
       <script
