@@ -1,0 +1,71 @@
+---
+title: "Open a Folder in Zed From the Terminal (the `code .` Equivalent)"
+publishedAt: "2026-09-23"
+summary: "VS Code has code . to open a folder, but Zed's CLI isn't on your PATH out of the box. Here's a one-line fix using a symlink in ~/.local/bin, plus the commands that make it useful."
+---
+
+If you're coming from VS Code, one of the first things you miss in Zed is `code .`. Zed has the exact same thing — a CLI called `zed` — but out of the box it isn't on your `PATH`, so you get this instead:
+
+```sh
+zsh: command not found: zed
+```
+
+Here's why that happens and the one command that fixes it.
+
+## Why it's missing
+
+Zed ships its CLI **inside the app bundle**. It lives here:
+
+```sh
+/Applications/Zed.app/Contents/MacOS/cli
+```
+
+Nothing links it into a directory on your `PATH`, so the shell can't find it. Zed has a built-in fix — **Zed → Install CLI** — but on recent versions it symlinks into `/usr/local/bin`, which needs `sudo` and writes outside your home directory.
+
+There's a cleaner option: put the symlink in `~/.local/bin`, which most modern setups (and my Mac) already have on `PATH`.
+
+## The fix
+
+One command, no `sudo`:
+
+```sh
+ln -sfn /Applications/Zed.app/Contents/MacOS/cli ~/.local/bin/zed
+```
+
+Verify it resolved and the CLI is alive:
+
+```sh
+command -v zed      # -> /Users/<you>/.local/bin/zed
+zed --version       # -> Zed 1.20.2 – /Applications/Zed.app
+```
+
+If the current terminal still says "command not found", the shell cached its lookups — clear that once with:
+
+```sh
+hash -r
+```
+
+New terminals will just work.
+
+## Usage
+
+Once it's linked, the CLI is surprisingly handy:
+
+```sh
+zed .                              # open the current folder
+zed ~/Personal/music_enforcer      # open a specific folder
+zed README.md                      # open a file
+zed src/music_enforcer/cli.py:42   # open at a specific line
+zed -n .                           # force a new window
+```
+
+The `:42` suffix is the one I use most — jumping straight to a line from a stack trace beats hunting for it in the editor.
+
+## Notes
+
+- Symlink the small `cli` launcher, **not** the 270 MB `zed` app binary. The latter also opens paths, but it's meant to be launched through the CLI.
+- `~/.local/bin` must be on your `PATH`. Check with `echo $PATH | tr ':' '\n'`.
+- The bundle path `/Applications/Zed.app/Contents/MacOS/cli` is stable across app updates, so the symlink keeps working when Zed updates itself.
+- It works in both `zsh` and `bash`; this is just a `PATH` entry, not a shell function, so there's nothing to add to your `.zshrc`.
+
+That's it — a two-minute setup that removes one more thing to think about every time you start working.
