@@ -1,26 +1,37 @@
-import { getBlogPosts, formatDate, getProjectsPosts } from "app/utils";
+import {
+  getBlogPosts,
+  formatDate,
+  getProjectsPosts,
+  type Post,
+} from "app/utils";
 import Link from "next/link";
 
 interface PostsProps {
   source: "blog" | "projects";
+  limit?: number;
+  random?: number;
 }
 
-export function Posts({ source }: PostsProps) {
+const byNewestFirst = (a: Post, b: Post) =>
+  new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt) ? -1 : 1;
+
+export function Posts({ source, limit, random = 0 }: PostsProps) {
   const isBlogsPost = source === "blog";
-  const allBlogs = isBlogsPost ? getBlogPosts() : getProjectsPosts();
+  const allPosts = (isBlogsPost ? getBlogPosts() : getProjectsPosts()).sort(
+    byNewestFirst
+  );
+
+  const latest = limit ? allPosts.slice(0, limit) : allPosts;
+  const picks = limit
+    ? [...allPosts.slice(limit)]
+        .sort(() => Math.random() - 0.5)
+        .slice(0, random)
+    : [];
+  const posts = [...latest, ...picks].sort(byNewestFirst);
 
   return (
     <div>
-      {allBlogs
-        .sort((a, b) => {
-          if (
-            new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)
-          ) {
-            return -1;
-          }
-          return 1;
-        })
-        .map((post) => (
+      {posts.map((post) => (
           <Link
             key={post.slug}
             className="flex flex-col space-y-1 mb-4"

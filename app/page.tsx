@@ -212,7 +212,7 @@ export default function Page() {
         <h2 className="text-2xl font-semibold dark:border-t-white border-t-1 pt-2 border-t-stone-950 mt-2">
           Blog entries
         </h2>
-        <Posts source="blog" />
+        <Posts source="blog" limit={3} random={1} />
       </div>
     </section>
   );
