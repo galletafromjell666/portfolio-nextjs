@@ -26,16 +26,39 @@ export default function Page() {
               <h2>Ooma Inc, Frontend Engineer L2</h2>
               <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
                 <li>
-                  Develop new modules for a UcaaS platform as part of a 8-person
-                  team.
+                  Develop new modules for a UCaaS platform as part of an
+                  8-person team, taking features from early requirements all the
+                  way to production.
                 </li>
                 <li>
-                  Translate product requirements and design mockups into a pixel
-                  perfect and robust UI.
+                  Build cross-tenant applications and microfrontends that adapt
+                  to each customer&apos;s setup, collaborating with multiple
+                  teams to coordinate versioning and get their releases shipped.
                 </li>
                 <li>
-                  Do code reviews to keep the code clean, share ideas and help
-                  to write better, more readable code.
+                  Publish and maintain shared npm packages on top of our
+                  internal design system, so components stay consistent and
+                  reusable across every microfrontend instead of being rebuilt.
+                </li>
+                <li>
+                  Use WebSockets to keep the UI in sync with real-time data,
+                  handling live updates smoothly without forcing full page
+                  refreshes.
+                </li>
+                <li>
+                  Translate PRDs and design mockups into pixel-perfect, robust
+                  features, handling edge cases carefully before they reach
+                  production.
+                </li>
+                <li>
+                  Review code to keep it clean, share ideas, and help the team
+                  write more readable, maintainable code through consistent
+                  feedback.
+                </li>
+                <li>
+                  Use AI to speed up my workflow by building custom skills and
+                  plugins that automate repetitive tasks and cut down on
+                  boilerplate.
                 </li>
               </ul>
             </div>
@@ -75,6 +98,17 @@ export default function Page() {
                 Engineering.
               </h2>
               <p className="text-muted">Cum laude</p>
+              <p className="text-muted mt-2">
+                I studied Computer Systems Engineering at the University of El
+                Salvador and graduated cum laude. The first semesters were heavy
+                on math and physics, which is where I learned to break a problem
+                into smaller pieces and work through it step by step. I also led
+                a few team projects along the way, splitting up the work and
+                keeping everyone on the same page. What stuck with me most,
+                though, is a self-taught mindset: reading the docs, testing
+                ideas on my own, and figuring things out instead of waiting for
+                someone to hand me the answer.
+              </p>
             </div>
           </div>
         </div>
