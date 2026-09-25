@@ -34,7 +34,7 @@ export function Posts({ source, limit, random = 0 }: PostsProps) {
       {posts.map((post) => (
           <Link
             key={post.slug}
-            className="flex flex-col space-y-1 mb-4"
+            className="flex flex-col space-y-1 mb-6"
             href={`/${isBlogsPost ? "blog" : "projects"}/${post.slug}`}
           >
             <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">

@@ -15,16 +15,16 @@ export default function Page() {
         things and taking on challenges—whether it’s exploring new frameworks,
         improving my skills, or just figuring out how to make stuff work better.
       </p>
-      <div data-test-id="experience" className="m t-8">
+      <div data-test-id="experience" className="mt-8">
         <div className="flex flex-col md:flex-row">
           <div className="w-1/4">
             <h1 className="text-xl font-semibold">Experience</h1>
           </div>
-          <div className="flex flex-col flex-1 space-y-4">
-            <div className="flex-flex-row space-y-0.5">
-              <p className="text-muted text-sm">March 2024, Present</p>
+          <div className="flex flex-col flex-1 space-y-6">
+            <div className="space-y-1">
+              <p className="text-muted text-sm">March 2024 – Present</p>
               <h2>Ooma Inc, Frontend Engineer L2</h2>
-              <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
+              <ul className="text-muted text-sm list-disc list-inside ml-4 mt-2 item-list">
                 <li>
                   Develop new modules for a UCaaS platform as part of an
                   8-person team, taking features from early requirements all the
@@ -62,10 +62,10 @@ export default function Page() {
                 </li>
               </ul>
             </div>
-            <div className="flex-flex-row space-y-0.5">
-              <p className="text-muted text-sm">March, 2023, February 2024</p>
+            <div className="space-y-1">
+              <p className="text-muted text-sm">March 2023 – February 2024</p>
               <h2>2600Hz, Software Engineer</h2>
-              <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
+              <ul className="text-muted text-sm list-disc list-inside ml-4 mt-2 item-list">
                 <li>
                   Implemented new features and maintained existing functionality
                   for a UCaaS platform built with React microfrontends
@@ -103,8 +103,8 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Education</h1>
           </div>
           <div className="flex flex-col flex-1 space-y-1.5">
-            <div className="flex-flex-row space-y-0.5">
-              <p className="text-muted text-sm">Feb, 2019, Dec 2023</p>
+            <div className="space-y-1">
+              <p className="text-muted text-sm">February 2019 – December 2023</p>
               <h2>
                 University of El Salvador, Bachelor's Degree in Computer Systems
                 Engineering.
@@ -171,10 +171,10 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Volunteering</h1>
           </div>
           <div className="flex flex-col flex-1">
-            <div className="flex-flex-row space-y-0.5">
-              <p className="text-muted text-sm">Feb, 2021, Dec 2022</p>
+            <div className="space-y-1">
+              <p className="text-muted text-sm">February 2021 – December 2022</p>
               <h2>Glasswing International, Robotics Instructor</h2>
-              <ul className="text-muted text-sm list-disc list-inside ml-4 item-list">
+              <ul className="text-muted text-sm list-disc list-inside ml-4 mt-2 item-list">
                 <li>
                   Taught high school students the fundamentals of programming
                   and robotics.
@@ -198,7 +198,7 @@ export default function Page() {
             <h1 className="text-xl font-semibold">Interests</h1>
           </div>
           <div className="flex flex-col flex-1">
-            <div className="flex-flex-row space-y-0.5 text-muted">
+            <div className="space-y-1 text-muted">
               <p>
                 Professional: micro frontend architecture, webRTC, websockets,
                 API building, data science.
@@ -209,7 +209,7 @@ export default function Page() {
         </div>
       </div>
       <div className="my-8">
-        <h2 className="text-2xl font-semibold dark:border-t-white border-t-1 pt-2 border-t-stone-950 mt-2">
+        <h2 className="text-xl font-semibold border-t border-t-stone-950 dark:border-t-white pt-2">
           Blog entries
         </h2>
         <Posts source="blog" limit={3} random={1} />

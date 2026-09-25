@@ -15,7 +15,7 @@ function page() {
           giovanni.aguirrez@hotmail.com
         </a>
       </div>
-      <h1 className="mb-6 text-xl font-semibold tracking-tighter ">Social:</h1>
+      <h1 className="mb-4 text-xl font-semibold">Social</h1>
       <div className="flex flex-col space-y-4">
         <div className="flex flex-row space-x-2">
           <Linkedin />
