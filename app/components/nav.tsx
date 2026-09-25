@@ -3,18 +3,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = {
-  "/": {
-    name: "home",
-  },
-  "/blog": {
-    name: "blog",
-  },
-  "/projects": {
-    name: "projects",
-  },
-  "/contact": {
-    name: "contact",
-  },
+  "/": { name: "home" },
+  "/blog": { name: "blog" },
+  "/projects": { name: "projects" },
+  "/contact": { name: "contact" },
 };
 
 function getIsNavItemActive(currentPath: string, path: string) {
@@ -25,32 +17,42 @@ function getIsNavItemActive(currentPath: string, path: string) {
 
 export function Navbar() {
   const pathname = usePathname();
+
+  const links = Object.entries(navItems).map(([path, { name }]) => {
+    const isCurrentItemActive = getIsNavItemActive(pathname, path);
+    const pathClass = isCurrentItemActive
+      ? "text-primary active"
+      : "text-muted hover:text-primary";
+    return (
+      <Link
+        key={path}
+        href={path}
+        className={`relative text-xs uppercase tracking-widest transition-colors ${pathClass}`}
+      >
+        {name}
+      </Link>
+    );
+  });
+
   return (
-    <aside className="-ml-[8px] mb-16 tracking-tight">
-      <div className="lg:sticky lg:top-20">
+    <header className="mb-16">
+      <div className="flex items-center justify-between">
+        <Link href="/" className="text-2xl tracking-tight">
+          Giovanni A.
+        </Link>
         <nav
-          className="flex flex-row items-start relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
           id="nav"
+          className="relative hidden items-center gap-8 md:flex"
         >
-          <div className="flex flex-row space-x-0 pr-10">
-            {Object.entries(navItems).map(([path, { name }]) => {
-              const isCurrentItemActive = getIsNavItemActive(pathname, path);
-              const pathClass = isCurrentItemActive
-                ? "text-primary active"
-                : "text-muted";
-              return (
-                <Link
-                  key={path}
-                  href={path}
-                  className={`${pathClass} transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-1 px-2 m-1`}
-                >
-                  {name}
-                </Link>
-              );
-            })}
-          </div>
+          {links}
         </nav>
       </div>
-    </aside>
+      <nav
+        id="nav-mobile"
+        className="relative mt-6 flex items-center gap-6 md:hidden"
+      >
+        {links}
+      </nav>
+    </header>
   );
 }

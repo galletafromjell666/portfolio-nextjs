@@ -34,6 +34,23 @@ html {
   scrollbar-gutter: stable both-edges;
 }
 
+/* Accordion: native <details>, no JS */
+summary {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+}
+
+details[open] .chevron {
+  transform: rotate(180deg);
+}
+
 .prose .anchor {
   @apply absolute invisible no-underline;
 
@@ -162,12 +179,21 @@ table {
   @apply text-neutral-900 dark:text-neutral-100;
 }
 
+/* Small uppercase label used for dates, eyebrows and footer headings */
+.label {
+  @apply text-xs uppercase tracking-widest text-neutral-600 dark:text-neutral-400;
+}
+
+.hairline {
+  @apply border-t border-black/15 dark:border-white/15;
+}
+
 nav .active::before {
   content: '';
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: -0.175rem;
+  left: -0.6rem;
   width: 0.275rem;
   height: 0.275rem;
   border-radius: 50%; 

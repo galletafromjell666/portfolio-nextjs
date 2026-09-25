@@ -28,13 +28,11 @@ function Post({ post }: { post: PostType }) {
           }),
         }}
       />
-      <h1 className="title font-semibold text-4xl tracking-tighter">
+      <h1 className="title text-4xl tracking-tight md:text-5xl">
         {post.metadata.title}
       </h1>
-      <div className="flex justify-between items-center mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(post.metadata.publishedAt)}
-        </p>
+      <div className="label mt-4 mb-12 flex justify-between items-center">
+        <p>{formatDate(post.metadata.publishedAt)}</p>
       </div>
       <article className="prose">
         <CustomMDX source={post.content} />

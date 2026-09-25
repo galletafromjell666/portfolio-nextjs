@@ -7,8 +7,11 @@ export function GET(request: Request) {
   return new ImageResponse(
     (
       <div tw="flex flex-col w-full h-full items-center justify-center bg-white">
-        <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
-          <h2 tw="flex flex-col text-4xl font-bold tracking-tight text-left">
+        <div tw="flex flex-col w-full py-16 px-16 justify-center">
+          <div tw="flex text-sm uppercase tracking-widest text-neutral-500 mb-6">
+            giovanni aguirre
+          </div>
+          <h2 tw="flex text-6xl font-bold tracking-tight text-left text-black">
             {title}
           </h2>
         </div>
