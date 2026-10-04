@@ -111,8 +111,8 @@ export default function Page() {
               Get in touch
             </Link>
             <a
-              href="/resume.pdf"
-              download="Giovanni_Aguirre_CV.pdf"
+              href="/giovanni_aguirre.pdf"
+              download="giovanni_aguirre.pdf"
               className="underline underline-offset-4"
             >
               Download CV

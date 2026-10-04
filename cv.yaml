@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/rendercv/rendercv/refs/tags/v2.8/schema.json
 # Single source of truth for the portfolio resume.
 # - Homepage reads this file via getCV() in app/utils/index.ts.
-# - PDF: run `pnpm resume:pdf` (writes public/resume.pdf, commit it).
+# - PDF: run `pnpm resume:pdf` (writes public/giovanni_aguirre.pdf, commit it).
 # Section names are arbitrary; keep the keys when reordering.
 cv:
   name: Giovanni Aguirre

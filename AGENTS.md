@@ -19,7 +19,7 @@ pnpm install
 pnpm dev      # local dev server
 pnpm build    # production build; this is the only real check (runs typecheck)
 pnpm start    # serve the production build
-pnpm resume:pdf  # regenerate public/resume.pdf from cv.yaml (needs RenderCV)
+pnpm resume:pdf  # regenerate public/giovanni_aguirre.pdf from cv.yaml (needs RenderCV)
 pnpm build:all   # resume:pdf + build (local prep; Vercel runs plain `build`)
 ```
 
@@ -29,13 +29,13 @@ Verify changes with `pnpm build`.
 `pnpm resume:pdf` shells out to RenderCV (Python 3.12+, Typst-based), which is a
 **dev-only** tool — Vercel does not run it. Install it once with
 `uv tool install "rendercv[full]"` (or `pipx install "rendercv[full]"`). The
-generated `public/resume.pdf` is committed.
+generated `public/giovanni_aguirre.pdf` is committed.
 
 ## Repo map
 
 - `app/layout.tsx` — root layout, fonts, metadata, nav/footer, `PixelTrail`
 - `cv.yaml` — resume single source of truth (RenderCV schema); homepage + PDF
-- `public/resume.pdf` — generated CV download (committed, see `pnpm resume:pdf`)
+- `public/giovanni_aguirre.pdf` — generated CV download (committed, see `pnpm resume:pdf`)
 - `app/page.tsx` — home (hero + accordion sections, rendered from `cv.yaml`)
 - `app/blog/page.tsx`, `app/blog/[slug]/page.tsx` — blog index and post page
 - `app/projects/page.tsx`, `app/projects/[slug]/page.tsx` — projects index and page
@@ -104,7 +104,7 @@ plain string. Text fields support Markdown; the homepage strips it
 (`stripMarkdown`), the PDF renders it.
 
 The homepage reads it via `getCV()` in `app/utils/index.ts`. After editing
-`cv.yaml`, run `pnpm resume:pdf` and commit `public/resume.pdf` — Vercel cannot
+`cv.yaml`, run `pnpm resume:pdf` and commit `public/giovanni_aguirre.pdf` — Vercel cannot
 regenerate it.
 
 ## Publishing
@@ -116,7 +116,7 @@ before deploying.
 CV change only (`cv.yaml`):
 
 1. Edit `cv.yaml`.
-2. `pnpm build:all` — regenerates `public/resume.pdf` and verifies the build.
+2. `pnpm build:all` — regenerates `public/giovanni_aguirre.pdf` and verifies the build.
 3. Commit and push: `git add -A && git commit -m "update CV" && git push`.
 4. Deploy: `vercel --prod`.
 

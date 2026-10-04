@@ -5,7 +5,7 @@
     "build": "next build",
     "start": "next start",
     "build:all": "pnpm resume:pdf && pnpm build",
-    "resume:pdf": "rendercv render cv.yaml --pdf-path public/resume.pdf --dont-generate-markdown --dont-generate-html --dont-generate-png"
+    "resume:pdf": "rendercv render cv.yaml --pdf-path public/giovanni_aguirre.pdf --dont-generate-markdown --dont-generate-html --dont-generate-png"
   },
   "dependencies": {
     "@vercel/analytics": "^1.1.3",

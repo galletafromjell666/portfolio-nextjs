@@ -28,7 +28,7 @@ pnpm resume:pdf
 pnpm build:all
 ```
 
-Commit the regenerated `public/resume.pdf`; Vercel only serves it.
+Commit the regenerated `public/giovanni_aguirre.pdf`; Vercel only serves it.
 
 ## Publishing changes
 
@@ -38,7 +38,7 @@ and `vercel` uploads your working tree — so generate the PDF before you deploy
 CV change only (`cv.yaml`):
 
 1. Edit `cv.yaml`.
-2. `pnpm build:all` — regenerates `public/resume.pdf` and verifies the build.
+2. `pnpm build:all` — regenerates `public/giovanni_aguirre.pdf` and verifies the build.
 3. Commit and push: `git add -A && git commit -m "update CV" && git push`.
 4. Deploy: `vercel --prod`.
 
