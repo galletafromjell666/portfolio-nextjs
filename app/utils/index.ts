@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { parse } from "yaml";
 
 export type Metadata = {
   title: string;
@@ -98,4 +99,84 @@ export function formatDate(date: string, includeRelative = false) {
   }
 
   return `${fullDate} (${formattedDate})`;
+}
+
+/**
+ * Resume data, read from the root `cv.yaml` (the RenderCV input and the single
+ * source of truth). Only `cv` is consumed here; `design`/`settings` are for the
+ * PDF build. Fields are optional because RenderCV allows omitting any of them.
+ */
+export type CVEntry = {
+  // experience / education / normal entries
+  company?: string;
+  position?: string;
+  institution?: string;
+  area?: string;
+  name?: string;
+  // one-line entries
+  label?: string;
+  details?: string;
+  // bullet entries
+  bullet?: string;
+  // shared
+  date?: string;
+  start_date?: string;
+  end_date?: string;
+  location?: string;
+  summary?: string;
+  highlights?: string[];
+};
+
+export type CVData = {
+  name?: string;
+  headline?: string;
+  location?: string;
+  email?: string;
+  website?: string;
+  social_networks?: { network: string; username?: string; url?: string }[];
+  sections: Record<string, (CVEntry | string)[]>;
+};
+
+export function getCV(): CVData {
+  const raw = fs.readFileSync(path.join(process.cwd(), "cv.yaml"), "utf-8");
+  return (parse(raw) as { cv: CVData }).cv;
+}
+
+/** Markdown used in RenderCV fields, reduced to plain text for the site. */
+export function stripMarkdown(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/\*([^*]+)\*/g, "$1")
+    .replace(/`([^`]+)`/g, "$1");
+}
+
+const MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+/** `2024-03` -> `Mar 2024`; `present` -> `Present`; anything else passes through. */
+function formatCVMonth(value: unknown): string | null {
+  if (value == null || value === "") return null;
+  const text = String(value).trim();
+  if (/^present$/i.test(text)) return "Present";
+  const match = /^(\d{4})(?:-(\d{2}))?$/.exec(text);
+  if (!match) return text;
+  const month = match[2] ? MONTHS[Number(match[2]) - 1] : null;
+  return month ? `${month} ${match[1]}` : match[1];
+}
+
+/** The `date` override wins; otherwise join start/end into a range. */
+export function formatCVPeriod(entry: CVEntry): string | null {
+  if (entry.date) return stripMarkdown(entry.date);
+  const start = formatCVMonth(entry.start_date);
+  const end = formatCVMonth(entry.end_date);
+  if (start && end) return `${start} – ${end}`;
+  return start || end;
+}
+
+/** `online courses` -> `Online Courses` for accordion headings. */
+export function titleCase(text: string): string {
+  return text.replace(/\w\S*/g, (w) => w.charAt(0).toUpperCase() + w.slice(1));
 }

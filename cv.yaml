@@ -1,0 +1,92 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/rendercv/rendercv/refs/tags/v2.8/schema.json
+# Single source of truth for the portfolio resume.
+# - Homepage reads this file via getCV() in app/utils/index.ts.
+# - PDF: run `pnpm resume:pdf` (writes public/resume.pdf, commit it).
+# Section names are arbitrary; keep the keys when reordering.
+cv:
+  name: Giovanni Aguirre
+  headline: Frontend Engineer
+  location: El Salvador
+  email: giovanni.aguirrez@hotmail.com
+  website: https://www.builtbygio.dev
+  social_networks:
+    - network: GitHub
+      username: galletafromjell666
+    - network: LinkedIn
+      username: gioaguirre664
+    - network: GitLab
+      username: gio.aguirre
+  sections:
+    summary:
+      - >-
+        I'm a frontend engineer from El Salvador. Right now, I'm working at a
+        leading telecom company, building and maintaining a UCaaS platform. I
+        love digging into TypeScript and finding creative ways to solve problems
+        and build awesome user experiences. I'm a huge fan of learning new
+        things and taking on challenges—whether it's exploring new frameworks,
+        improving my skills, or just figuring out how to make stuff work better.
+
+    experience:
+      - company: Ooma Inc
+        position: Frontend Engineer L2
+        start_date: 2024-03
+        end_date: present
+        highlights:
+          - "Develop new modules for a UCaaS platform as part of an 8-person team, taking features from early requirements all the way to production."
+          - "Build cross-tenant applications and microfrontends that adapt to each customer's setup, collaborating with multiple teams to coordinate versioning and get their releases shipped."
+          - "Publish and maintain shared npm packages on top of our internal design system, so components stay consistent and reusable across every microfrontend instead of being rebuilt."
+          - "Use WebSockets to keep the UI in sync with real-time data, handling live updates smoothly without forcing full page refreshes."
+          - "Translate PRDs and design mockups into pixel-perfect, robust features, handling edge cases carefully before they reach production."
+          - "Review code to keep it clean, share ideas, and help the team write more readable, maintainable code through consistent feedback."
+          - "Use AI to speed up my workflow by building custom skills and plugins that automate repetitive tasks and cut down on boilerplate."
+      - company: 2600Hz
+        position: Software Engineer
+        start_date: 2023-03
+        end_date: 2024-02
+        highlights:
+          - "Implemented new features and maintained existing functionality for a UCaaS platform built with React microfrontends orchestrated through SingleSPA, keeping each app independently deployable."
+          - "Enhanced and supported a desktop application built with Electron, wiring main and renderer process communication and keeping it in sync with the web platform."
+          - "Proposed and built proofs of concept for new features, then worked with the team to turn the best ideas into production work."
+          - "Consumed real-time data events over WebSockets, optimizing data structures and the update flow so the UI stayed responsive under heavy event traffic."
+          - "Worked closely with product and design to translate requirements into shipped features, and reviewed code to keep it clean, consistent, and readable."
+
+    education:
+      - institution: University of El Salvador
+        area: Bachelor's Degree in Computer Systems Engineering
+        start_date: 2019-02
+        end_date: 2023-12
+        summary: >-
+          The first semesters were heavy on math and physics, which is where I
+          learned to break a problem into smaller pieces and work through it
+          step by step. I also led a few team projects along the way, splitting
+          up the work and keeping everyone on the same page. What stuck with me
+          most, though, is a self-taught mindset: reading the docs, testing
+          ideas on my own, and figuring things out instead of waiting for
+          someone to hand me the answer.
+        highlights:
+          - "Cum laude"
+
+    Online Courses:
+      - bullet: "Coursera, Python for Everybody Specialization"
+      - bullet: "Coursera, Intermediate PostgreSQL"
+      - bullet: "Google Cloud Skills Boost, Develop Serverless Applications on Cloud Run."
+
+    skills:
+      - label: Skills
+        details: React, Next.js, MongoDB, Drizzle ORM, Node.js, Express, Electron, Zustand, TypeScript, Python
+
+    volunteering:
+      - name: "Glasswing International, Robotics Instructor"
+        start_date: 2021-02
+        end_date: 2022-12
+        highlights:
+          - "Taught high school students the fundamentals of programming and robotics."
+          - "Guided students in developing abilities that will help to solve problems using algorithms and soft skills."
+          - "Collaborated in organizing and facilitating multi-school robotics tournaments."
+
+    interests:
+      - bullet: "**Professional:** micro frontend architecture, webRTC, websockets, API building, data science."
+      - bullet: "**Hobbies:** electronics, gaming, PC building, gym training."
+
+design:
+  theme: harvard
