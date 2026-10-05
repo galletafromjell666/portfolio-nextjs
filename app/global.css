@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Manual theme: `dark:` keys off a `.dark` class on <html> instead of the OS
+   media query, so the header toggle can override the system setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 ::selection {
   background-color: #47a3f3;
   color: #fefefe;
@@ -17,21 +21,18 @@
   --sh-entity: #e25a1c;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --sh-class: #4c97f8;
-    --sh-identifier: white;
-    --sh-keyword: #f47067;
-    --sh-string: #0fa295;
-  }
-  html {
-    color-scheme: dark;
-  }
+html.dark {
+  --sh-class: #4c97f8;
+  --sh-identifier: white;
+  --sh-keyword: #f47067;
+  --sh-string: #0fa295;
+  color-scheme: dark;
 }
 
 html {
   min-width: 360px;
   scrollbar-gutter: stable both-edges;
+  color-scheme: light;
 }
 
 /* Accordion: native <details>, no JS */

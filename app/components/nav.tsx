@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeToggle } from "./theme-toggle";
 
 const navItems = {
   "/": { name: "home" },
@@ -40,12 +41,15 @@ export function Navbar() {
         <Link href="/" className="text-2xl tracking-tight">
           Giovanni A.
         </Link>
-        <nav
-          id="nav"
-          className="relative hidden items-center gap-8 md:flex"
-        >
-          {links}
-        </nav>
+        <div className="flex items-center gap-6 md:gap-8">
+          <nav
+            id="nav"
+            className="relative hidden items-center gap-8 md:flex"
+          >
+            {links}
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
       <nav
         id="nav-mobile"

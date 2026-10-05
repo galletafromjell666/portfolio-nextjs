@@ -6,7 +6,7 @@ Next.js App Router site where blog and project pages are MDX files.
 ## Stack
 
 - Next.js 16 (App Router) + React 19, TypeScript strict
-- Tailwind CSS v4 alpha (`@import "tailwindcss"` in `app/global.css`)
+- Tailwind CSS v4 (`@import "tailwindcss"` in `app/global.css`)
 - MDX via `next-mdx-remote/rsc`, syntax highlighting via `sugar-high`
 - pnpm, Node 20.11.0 (`.nvmrc`)
 - CV/resume: `cv.yaml` (RenderCV schema) drives both the homepage and the PDF
@@ -58,8 +58,11 @@ Import alias is `app/*` (see `tsconfig.json` `baseUrl`).
   `.text-primary`, `.hairline` (top border), `.item-list` (list spacing).
   Long-form MDX body text is styled by `.prose`.
 - Visual language: editorial, hairline separators
-  (`border-black/15 dark:border-white/15`), neutral palette, dark mode via
-  `prefers-color-scheme` (no theme toggle). Hover/active colors use
+  (`border-black/15 dark:border-white/15`), neutral palette. Dark mode is
+  class-based: `@custom-variant dark` in `app/global.css` keys `dark:` off a
+  `.dark` class on `<html>`; `ThemeToggle` (in the header) flips it and stores
+  the choice in `localStorage`, defaulting to the OS setting via a pre-paint
+  script in `app/layout.tsx`. Hover/active colors use
   `hover:text-neutral-500`.
 - The accordion is a native `<details>` element — no JS, no state.
 - Icons come from `react-feather`.
