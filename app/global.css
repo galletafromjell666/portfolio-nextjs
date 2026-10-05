@@ -197,8 +197,8 @@ nav .active::before {
   left: -0.6rem;
   width: 0.275rem;
   height: 0.275rem;
-  border-radius: 50%; 
-  @apply bg-neutral-900 dark:bg-neutral-100
+  border-radius: 50%;
+  background-color: currentColor;
 }
 
 /* Motion. All decorative: skipped under `prefers-reduced-motion`, and each
