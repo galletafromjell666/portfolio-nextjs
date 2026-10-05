@@ -5,6 +5,7 @@ import {
   type Post,
 } from "app/utils";
 import Link from "next/link";
+import { Reveal } from "./reveal";
 
 interface PostsProps {
   source: "blog" | "projects";
@@ -31,35 +32,36 @@ export function Posts({ source, limit, random = 0 }: PostsProps) {
 
   return (
     <div className="border-b border-b-black/15 dark:border-b-white/15">
-      {posts.map((post) => (
-        <Link
-          key={post.slug}
-          className="group flex flex-col gap-2 border-t border-t-black/15 py-6 transition-colors hover:text-neutral-500 dark:border-t-white/15 md:flex-row md:gap-8"
-          href={`/${isBlogsPost ? "blog" : "projects"}/${post.slug}`}
-        >
-          <div className="shrink-0 md:w-[140px]">
-            <p className="label tabular-nums">
-              {formatDate(post.metadata.publishedAt, false)}
-            </p>
-          </div>
+      {posts.map((post, index) => (
+        <Reveal key={post.slug} delay={index * 0.04}>
+          <Link
+            className="group flex flex-col gap-2 border-t border-t-black/15 py-6 transition-colors hover:text-neutral-500 dark:border-t-white/15 md:flex-row md:gap-8"
+            href={`/${isBlogsPost ? "blog" : "projects"}/${post.slug}`}
+          >
+            <div className="shrink-0 md:w-[140px]">
+              <p className="label tabular-nums">
+                {formatDate(post.metadata.publishedAt, false)}
+              </p>
+            </div>
 
-          <div className="flex flex-1 flex-col gap-1">
-            <p className="text-2xl tracking-tight group-hover:underline">
-              {post.metadata.title}
-            </p>
-            <p className="text-neutral-600 dark:text-neutral-400">
-              {post.metadata.summary}
-            </p>
-            {post.metadata?.stack && (
-              <span className="label mt-1">
-                Stack:
-                <span className="ml-1 normal-case tracking-normal text-neutral-600 dark:text-neutral-400">
-                  {post.metadata.stack}
+            <div className="flex flex-1 flex-col gap-1">
+              <p className="text-2xl tracking-tight link-underline">
+                {post.metadata.title}
+              </p>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                {post.metadata.summary}
+              </p>
+              {post.metadata?.stack && (
+                <span className="label mt-1">
+                  Stack:
+                  <span className="ml-1 normal-case tracking-normal text-neutral-600 dark:text-neutral-400">
+                    {post.metadata.stack}
+                  </span>
                 </span>
-              </span>
-            )}
-          </div>
-        </Link>
+              )}
+            </div>
+          </Link>
+        </Reveal>
       ))}
     </div>
   );

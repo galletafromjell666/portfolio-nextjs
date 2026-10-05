@@ -200,3 +200,74 @@ nav .active::before {
   border-radius: 50%; 
   @apply bg-neutral-900 dark:bg-neutral-100
 }
+
+/* Motion. All decorative: skipped under `prefers-reduced-motion`, and each
+   piece falls back to the unstyled (instant) behaviour where unsupported.
+   Page/list entrance is handled by `motion` (app/template.tsx,
+   app/components/reveal.tsx). */
+
+/* Without scripting, motion's server-rendered `initial` styles would leave
+   every animated element invisible. Un-hide them so the content still reads. */
+@media (scripting: none) {
+  .page-enter,
+  .reveal-item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Theme switch: crossfade the whole page via the View Transitions API. The
+   default root transition is already a crossfade; this just sets the timing.
+   Browsers without the API flip instantly. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* Hover underline that wipes in from the left. Kept outside the motion query
+   so reduced-motion users still get the underline, just instantly. */
+.link-underline {
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0%
+    1px;
+}
+
+.link-underline:hover,
+.group:hover .link-underline {
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Accordion: animate the native <details> body. `::details-content` is the
+     expandable part (the summary always stays visible); the 0fr -> 1fr grid
+     row animates height without JS. */
+  details::details-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    content-visibility: hidden;
+    transition:
+      grid-template-rows 0.3s ease,
+      content-visibility 0.3s allow-discrete;
+  }
+
+  details[open]::details-content {
+    grid-template-rows: 1fr;
+    content-visibility: visible;
+  }
+
+  /* The grid item (the accordion body) must be allowed to shrink below its
+     content size, or the 0fr row never collapses. Set on the body itself via
+     `min-h-0 overflow-hidden` in accordion.tsx — a `::details-content > *`
+     rule here is dropped by the CSS optimizer. */
+
+  .link-underline {
+    transition: background-size 0.2s ease;
+  }
+}

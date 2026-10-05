@@ -17,7 +17,7 @@ export function Accordion({ label, defaultOpen, children }: AccordionProps) {
         {label}
         <ArrowDown className="chevron shrink-0" size={20} strokeWidth={1.5} />
       </summary>
-      <div className="mt-6">{children}</div>
+      <div className="mt-6 min-h-0 overflow-hidden">{children}</div>
     </details>
   );
 }

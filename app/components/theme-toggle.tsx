@@ -11,9 +11,18 @@ export function ThemeToggle() {
 
   function toggle() {
     const next = !document.documentElement.classList.contains("dark");
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-    setIsDark(next);
+    const apply = () => {
+      document.documentElement.classList.toggle("dark", next);
+      localStorage.setItem("theme", next ? "dark" : "light");
+      setIsDark(next);
+    };
+    // Crossfade the whole page with the View Transitions API; browsers without
+    // it just flip instantly.
+    const doc = document as Document & {
+      startViewTransition?: (cb: () => void) => unknown;
+    };
+    if (doc.startViewTransition) doc.startViewTransition(apply);
+    else apply();
   }
 
   return (
