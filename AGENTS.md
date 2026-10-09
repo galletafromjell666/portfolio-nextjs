@@ -142,3 +142,6 @@ If both changed, follow the CV steps — `build:all` covers the site build too.
   Leave those guards in place.
 - Editing `cv.yaml` without running `pnpm resume:pdf` leaves the homepage and
   the PDF out of sync.
+- If `vercel --prod` fails with `Not authorized`, it's a stale local token, not
+  a scope problem — run `vercel link --yes --project gio-portfolio` to refresh
+  it, then deploy again.
