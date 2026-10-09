@@ -32,37 +32,29 @@ cv:
         start_date: 2024-03
         end_date: present
         highlights:
-          - "Develop new modules for a UCaaS platform as part of an 8-person team, taking features from early requirements all the way to production."
-          - "Build cross-tenant applications and microfrontends that adapt to each customer's setup, collaborating with multiple teams to coordinate versioning and get their releases shipped."
-          - "Publish and maintain shared npm packages on top of our internal design system, so components stay consistent and reusable across every microfrontend instead of being rebuilt."
-          - "Use WebSockets to keep the UI in sync with real-time data, handling live updates smoothly without forcing full page refreshes."
-          - "Translate PRDs and design mockups into pixel-perfect, robust features, handling edge cases carefully before they reach production."
-          - "Review code to keep it clean, share ideas, and help the team write more readable, maintainable code through consistent feedback."
-          - "Use AI to speed up my workflow by building custom skills and plugins that automate repetitive tasks and cut down on boilerplate."
+          - "Develop new modules for a **UCaaS platform** on an 8-person team, taking features from early requirements through production."
+          - "Build **cross-tenant applications and microfrontends** that adapt to each customer's setup, coordinating versioning and releases across multiple teams."
+          - "Publish and maintain **shared npm packages** on the internal design system, keeping components consistent and reusable across every microfrontend."
+          - "Wire the UI to **real-time data over WebSockets**, streaming live updates without full page refreshes."
+          - "Translate PRDs and design mockups into **pixel-perfect features**, hardening edge cases before they reach production."
+          - "Review code and give consistent feedback that keeps the team's output **readable and maintainable**."
+          - "Build **custom AI skills and plugins** that automate repetitive tasks and cut down on boilerplate."
       - company: 2600Hz
         position: Software Engineer
         start_date: 2023-03
         end_date: 2024-02
         highlights:
-          - "Implemented new features and maintained existing functionality for a UCaaS platform built with React microfrontends orchestrated through SingleSPA, keeping each app independently deployable."
-          - "Enhanced and supported a desktop application built with Electron, wiring main and renderer process communication and keeping it in sync with the web platform."
-          - "Proposed and built proofs of concept for new features, then worked with the team to turn the best ideas into production work."
-          - "Consumed real-time data events over WebSockets, optimizing data structures and the update flow so the UI stayed responsive under heavy event traffic."
-          - "Worked closely with product and design to translate requirements into shipped features, and reviewed code to keep it clean, consistent, and readable."
+          - "Implemented new features and maintained a **UCaaS platform** built from React microfrontends orchestrated with SingleSPA, keeping each app independently deployable."
+          - "Enhanced an **Electron desktop app**, wiring main/renderer process communication to keep it in sync with the web platform."
+          - "Prototyped **proofs of concept** for new features and helped turn the strongest ideas into production work."
+          - "Consumed **real-time events over WebSockets**, optimizing data structures and the update flow to keep the UI responsive under heavy traffic."
+          - "Partnered with product and design to **translate requirements into shipped features**, and reviewed code for consistency and readability."
 
     education:
       - institution: University of El Salvador
         area: Bachelor's Degree in Computer Systems Engineering
         start_date: 2019-02
         end_date: 2023-12
-        summary: >-
-          The first semesters were heavy on math and physics, which is where I
-          learned to break a problem into smaller pieces and work through it
-          step by step. I also led a few team projects along the way, splitting
-          up the work and keeping everyone on the same page. What stuck with me
-          most, though, is a self-taught mindset: reading the docs, testing
-          ideas on my own, and figuring things out instead of waiting for
-          someone to hand me the answer.
         highlights:
           - "Cum laude"
 
@@ -80,9 +72,9 @@ cv:
         start_date: 2021-02
         end_date: 2022-12
         highlights:
-          - "Taught high school students the fundamentals of programming and robotics."
-          - "Guided students in developing abilities that will help to solve problems using algorithms and soft skills."
-          - "Collaborated in organizing and facilitating multi-school robotics tournaments."
+          - "Taught high school students the **fundamentals of programming and robotics**."
+          - "Coached students through **algorithm-based problem solving** and soft-skill development."
+          - "Co-organized **multi-school robotics tournaments**, facilitating events across schools."
 
     interests:
       - bullet: "**Professional:** micro frontend architecture, webRTC, websockets, API building, data science."
