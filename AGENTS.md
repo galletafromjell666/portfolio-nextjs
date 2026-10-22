@@ -8,7 +8,7 @@ Next.js App Router site where blog and project pages are MDX files.
 - Next.js 16 (App Router) + React 19, TypeScript strict
 - Tailwind CSS v4 (`@import "tailwindcss"` in `app/global.css`)
 - MDX via `next-mdx-remote/rsc`, syntax highlighting via `sugar-high`
-- pnpm, Node 20.11.0 (`.nvmrc`)
+- pnpm, Node 24.22.1 (`.nvmrc`)
 - CV/resume: `cv.yaml` (RenderCV schema) drives both the homepage and the PDF
 - Deployed to Vercel; analytics/speed-insights from `@vercel/*`
 
