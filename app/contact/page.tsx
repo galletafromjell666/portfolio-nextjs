@@ -51,7 +51,7 @@ function page() {
             target="_blank"
             rel="noopener noreferrer"
             href={href}
-            className="group flex items-center justify-between border-b border-black/15 py-4 transition-colors hover:text-neutral-500 dark:border-white/15"
+            className="group flex items-center justify-between border-b border-black/15 py-4 transition-colors last:border-b-0 hover:text-neutral-500 dark:border-white/15"
           >
             <span className="flex items-center gap-3 text-xl">
               <Icon size={18} />

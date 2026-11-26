@@ -64,7 +64,7 @@ cv:
       - bullet: "Google Cloud Skills Boost, Develop Serverless Applications on Cloud Run."
 
     skills:
-      - label: Skills
+      - label: Languages & tools
         details: React, Next.js, MongoDB, Drizzle ORM, Node.js, Express, Electron, Zustand, TypeScript, Python
 
     volunteering:

@@ -31,7 +31,7 @@ export function Posts({ source, limit, random = 0 }: PostsProps) {
   const posts = [...latest, ...picks].sort(byNewestFirst);
 
   return (
-    <div className="border-b border-b-black/15 dark:border-b-white/15">
+    <div>
       {posts.map((post, index) => (
         <Reveal key={post.slug} delay={index * 0.04}>
           <Link
@@ -45,8 +45,8 @@ export function Posts({ source, limit, random = 0 }: PostsProps) {
             </div>
 
             <div className="flex flex-1 flex-col gap-1">
-              <p className="text-2xl tracking-tight link-underline">
-                {post.metadata.title}
+              <p className="text-2xl tracking-tight">
+                <span className="link-underline">{post.metadata.title}</span>
               </p>
               <p className="text-neutral-600 dark:text-neutral-400">
                 {post.metadata.summary}

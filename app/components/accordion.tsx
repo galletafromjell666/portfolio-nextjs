@@ -11,7 +11,7 @@ export function Accordion({ label, defaultOpen, children }: AccordionProps) {
     <details
       name="portfolio"
       open={defaultOpen}
-      className="hairline group border-b border-b-black/15 dark:border-b-white/15 py-6"
+      className="hairline group border-b border-b-black/15 last:border-b-0 dark:border-b-white/15 py-6"
     >
       <summary className="flex cursor-pointer items-center justify-between gap-4 text-3xl md:text-4xl">
         {label}
