@@ -1,0 +1,254 @@
+---
+title: "Passive Recon on a Phishing Domain (with the Prompt I Use)"
+publishedAt: "2026-11-25"
+summary: "A six-week-old Visa clone, already flagged by two vendors and still online. Here is the passive recon chain that builds a report, plus the prompt I copy for the next one."
+---
+
+> **Note on the data:** every domain, registrar, host, ASN and IP below is obfuscated. No real domain or IP appears in this post. The IPs come from `203.0.113.0/24` (TEST-NET-3, reserved for documentation) and the domains use the `.example` suffix.
+
+A link opened on my phone and showed a Visa payment page. The same link on my laptop showed a plain 403. The site only renders for one region, which means any abuse desk outside that region sees nothing.
+
+The domain was six weeks old, had no MX record, sat behind no CDN, and had already been flagged as phishing two weeks before I looked. It was still up. Reporting is the legitimate move here, but it is also a slow, maybe-nothing move. You file it and hope.
+
+Everything below is passive: DNS, WHOIS, certificate transparency, one ordinary `GET`.
+
+## Resolve it
+
+```bash
+dig +short example-phish.cc A / AAAA / NS / MX / TXT
+dig +short -x 203.0.113.143
+```
+
+```
+203.0.113.143
+a9.shared-ns.example.
+b9.shared-ns.example.
+(no MX)
+(no TXT)
+```
+
+One A record, no AAAA, no CDN: a single box, so a single party to name. No MX and no SPF or DKIM means the domain cannot receive mail, so it exists only to serve a page. The nameservers belong to a shared service that is popular for anti-takedown resilience. A later lookup returned `a.` and `b.` instead of `a9.` and `b9.`, so the nodes rotate. Reverse DNS is empty, and real hosting gives every customer IP a pointer.
+
+## WHOIS the domain
+
+```bash
+whois -h whois.nic.cc example-phish.cc
+```
+
+```
+Creation Date: 2026-10-14T18:13:21Z
+Updated Date:  2026-10-14T18:13:23Z
+Registry Expiry Date: 2027-10-14T18:13:21Z
+Registrar Abuse Contact Email: abuse@example-domains.example
+Domain Status: clientTransferProhibited
+```
+
+Created and updated two seconds apart: registered, parked at the final nameservers, never touched again. A one-year registration with no renewal fits the same read. `clientTransferProhibited` is the default lock, not a sign of legitimacy. The useful line is the abuse contact.
+
+## WHOIS the IP
+
+```bash
+whois 203.0.113.143 | egrep -i \
+  "netname|orgname|org-name|country|descr|abuse-mailbox|inetnum|route|mnt-by"
+```
+
+```
+inetnum:  203.0.113.0 - 203.0.113.255
+netname:  ExampleHost
+country:  US
+org-name: EXAMPLE HOLDINGS LIMITED
+country:  HK
+remarks:  Example Registrar L.L.C-FZ administers the IP address resource only.
+abuse-mailbox: abuse@examplehost.example
+mnt-by:   lir-ae-example-registrar-1-MNT
+```
+
+A UAE LIR, a Hong Kong company, and a brand name on a `/24` labelled `country: US`. Each hop is a separate jurisdiction. The `remarks:` line disclaims responsibility for everything except the IP block, which usually means the provider has been complained about before.
+
+## Look at the server, once
+
+```bash
+curl -sS -I -m 15 https://example-phish.cc/
+curl -sS -m 20 https://example-phish.cc/
+```
+
+`HEAD` returns `405` with `allow: GET`, `server: nginx`, no `cf-ray` and no Cloudflare. A JSON API behind the page, and one host with no CDN.
+
+`access-control-allow-origin: *` on a card form is a real misconfiguration. `X-Shopify-Session` in the CORS allow-list is the better detail: the site is not on Shopify, so this is a purchased kit with an unclean header list.
+
+The body is a hand-written 403:
+
+```html
+<h1>403 Forbidden</h1>
+<center>Service not available in your region</center>
+```
+
+That is why it worked on my phone and not on my laptop, and why a report needs screenshots and headers attached. An abuse desk in the wrong region sees exactly this page.
+
+## The certificate
+
+```bash
+echo | openssl s_client -connect example-phish.cc:443 -servername example-phish.cc 2>/dev/null \
+  | openssl x509 -noout -issuer -subject -dates
+```
+
+```
+issuer=C=US, O=Let's Encrypt, CN=YE1
+subject=CN=example-phish.cc
+notBefore=Oct 19 15:04:35 2026 GMT
+notAfter=Jan 17 15:04:34 2027 GMT
+```
+
+Single name, no SANs, free DV cert, issued five days after registration. The crt.sh wildcard query for sibling domains was a dead end: an empty array, then a timeout. It rate-limits hard, so try it on the next one.
+
+## Check the verdicts first
+
+Search the exact domain before writing anything. Gridinsoft had it as phishing at `1/100`, checked 2026-11-10, and alphaMountain listed it as `Suspicious`. Two weeks before I looked, and still online. That is the realistic picture of this work: the flags exist, and nobody has acted on them.
+
+## The chain
+
+```
+victim ──> example-phish.cc ──> a9.shared-ns.example ──> ExampleReg Pte Ltd (SG)  [complaint@example-reg.example]
+                      └─> 203.0.113.143 ────> ExampleHost / AS64512  [abuse@examplehost.example]
+                                              └─ EXAMPLE HOLDINGS LIMITED (HK)
+                                                 └─ Example Registrar L.L.C-FZ (UAE)  [IP resource only]
+         registrar ───────────────────────────> ExampleDomains Inc (US)       [abuse@example-domains.example]
+```
+
+## The report
+
+Send the same text to all three and forget about it:
+
+```
+This domain is an active phishing site impersonating Visa Inc.
+
+URL:        https://example-phish.cc/
+IP:         203.0.113.143 (AS64512, ExampleHost)
+Created:    2026-10-14 via ExampleDomains
+Page title: "Visa, un líder confiable en pagos digitales | Visa"
+
+The site clones Visa's brand and collects payment card credentials. It is
+already classified as phishing by alphaMountain.ai and Gridinsoft
+(trust score 1/100, checked 2026-11-10).
+
+The site geo-blocks many regions and returns:
+  403 Forbidden - "Service not available in your region"
+so you may need to test from a different region to reproduce. Screenshots
+and response headers attached.
+
+This is a violation of your acceptable use / anti-abuse policy and of
+Visa's trademark rights. Please suspend the domain and hosting immediately
+and preserve logs for law enforcement.
+```
+
+Where to send it:
+
+- Registrar `abuse@example-domains.example` can lock the domain.
+- Host `abuse@examplehost.example` can kill the box.
+- DNS `complaint@example-reg.example` can null-route the name.
+- Google Safe Browsing and Microsoft SmartScreen put a warning in front of users in hours.
+- APWG and PhishTank add corroboration for the next report.
+- Visa (`phishing@visa.com`) and Mastercard (`phishing@mastercard.com`) have legal teams.
+
+The warnings move faster than the takedowns, and either one may simply not happen. File it, keep the evidence, move on.
+
+## The prompt
+
+I reuse this. Fill in the domain and hand it to any agent with shell access:
+
+```
+Investigate the domain {{DOMAIN}} and build a takedown-ready abuse case.
+
+CONSTRAINTS — hard limits, do not exceed:
+- Passive only. DNS lookups, WHOIS, certificate transparency, and a maximum of 3
+  ordinary HTTP requests to the site itself. No port scanning, no directory brute
+  forcing, no login attempts, no vulnerability probing, no load testing. Do not
+  attempt to take the site down or access anything behind authentication. If you
+  are unsure whether an action is passive, don't do it.
+- If a lookup is rate-limited or times out, record that as a finding and move on.
+  Do not retry more than twice.
+- Never enter, guess at, or handle credentials.
+
+DO THIS, in order, and show the exact command plus its real output for each:
+
+1. DNS
+   dig +short {{DOMAIN}} A / AAAA / NS / MX / TXT
+   dig +short -x <each A record>
+   Interpret: CDN in front or not? how many boxes? does it receive mail? does it
+   have SPF/DKIM? do the nameservers belong to a mass-hosting or anti-takedown
+   DNS service? no PTR = rented box, worth noting.
+
+2. Domain registration
+   whois {{DOMAIN}}          (if empty, query the registry directly:
+                             whois -h whois.nic.<tld> {{DOMAIN}})
+   Record creation/update dates, registrar, registrar abuse email and phone,
+   status flags, DNSSEC. Interpret domain age, whether created/updated are
+   seconds apart (burner), and registration length.
+
+3. IP ownership
+   whois <A record> | egrep -i "netname|orgname|org-name|country|descr|abuse-mailbox|inetnum|route|mnt-by"
+   Build the full accountability chain: LIR / RIR handle -> operating company ->
+   brand name. Note jurisdiction hops and any "administers the IP resource only"
+   style disclaimers.
+
+4. Web server, lightly
+   curl -sS -I -m 15 https://{{DOMAIN}}/
+   curl -sS -I -m 15 http://{{DOMAIN}}/
+   curl -sS -m 20 https://{{DOMAIN}}/ | head -c 1500
+   Note: server header, CDN headers (cf-ray, x-vercel, x-amz), redirects, status
+   codes on HEAD, CORS policy, and anything in the headers that leaks the kit or
+   framework. If the body is a 403/geo-block, quote it verbatim — that is the most
+   important finding for the report.
+
+5. Certificate
+   echo | openssl s_client -connect {{DOMAIN}}:443 -servername {{DOMAIN}} 2>/dev/null \
+     | openssl x509 -noout -issuer -subject -dates
+   Note issuer, whether it is single-name or has SANs (sibling domains), and the
+   gap between domain creation and cert issuance.
+
+6. Certificate transparency — sibling domains on the same operator
+   curl -sS -m 25 "https://crt.sh/?q={{DOMAIN}}&output=json"
+   curl -sS -m 30 "https://crt.sh/?q=%25.{{DOMAIN}}&output=json"
+   If it times out, say so; it is frequently rate-limited.
+
+7. Reputation — do this before writing any analysis
+   Web search the exact domain. Check Gridinsoft, ScamAdviser, VirusTotal /
+   alphaMountain, URLhaus (urlhaus.abuse.ch), PhishTank, and for brand
+   impersonation check the brand's own fraud reporting page.
+   Record vendor verdict + date. Note explicitly whether it was already flagged
+   before today — "detected but not taken down" is usually the real story.
+
+DELIVERABLE — write a markdown file named {{DOMAIN}}-recon.md containing:
+
+- TL;DR table: page title / domain age / registrar / IP / ASN / host / nameservers /
+  DNS provider / TLS / stack / geo-fence behaviour / third-party verdicts.
+- "Why this is malicious and what kind" — impersonated brand, OR visa/document
+  scam, OR fake shop, etc. Say which, because it decides who to report to.
+- The step-by-step sequence above, each with the command, the real output, and a
+  one-line "reads:" interpretation.
+- An ASCII accountability-chain diagram with the abuse contact on each hop.
+- A paste-ready abuse report email, plus a list of recipients with what each can
+  actually do.
+- Open threads / next steps, and a dated timeline.
+- Anonymisation block: state that domain, IP (use 203.0.113.0/24 TEST-NET-3),
+  registrar, host and ASN are placeholders (AS64512, *.example domains).
+
+RULES FOR THE WRITING:
+- Every claim must trace to a command output above it. No speculation presented as
+  fact. Mark inference as inference.
+- Do not editorialise about the operator's nationality or location; state the
+  registry facts and let the reader draw conclusions.
+- If the site geo-blocks your region, say so prominently and note that abuse desks
+  will hit the same block — attach screenshots and the headers instead.
+```
+
+The constraints come first on purpose, because "investigate this site" without them invites scanning. "Show the output" is what turns a summary into evidence.
+
+```
+2026-10-14  domain registered
+2026-10-19  certificate issued
+2026-11-10  Gridinsoft flags it as phishing
+2026-11-25  this recon, reports filed
+```
+
+Public records, a few headers and one certificate were enough to name four parties in four countries. Whether any of them act is out of my hands.
